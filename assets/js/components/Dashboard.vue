@@ -1,6 +1,6 @@
 <template>
   <div class="grid p-fluid">
-    <div class="col-12 lg:col-6 xl:col-3">
+    <!-- <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -85,6 +85,19 @@
         <Chart type="bar" :data="barData" :options="barOptions" />
       </div>
     </div>
+ -->
+    <div class="col-12 lg-col-12">
+
+      <div class="card">
+
+        <h5>Advanced</h5>
+
+        <FileUpload name="report" url="/import" @upload="onUpload" :multiple="false" accept=".csv" :maxFileSize="1000000"/>
+      </div>
+    </div>
+
+    <Toast />
+    <Button @click="showSuccess()" label="Success" class="p-button-success mr-2" />
 
   </div>
 </template>
@@ -92,6 +105,15 @@
 <script>
 export default {
   name: "Dashboard",
+  methods: {
+    onUpload(event) {
+      this.$toast.add({severity: 'info', summary: 'Success', detail: JSON.parse(event.xhr.responseText).message, life: 3000});
+    },
+    showSuccess() {
+        this.$toast.add({severity:'success', summary: 'Success Message', detail:'Message Detail', life: 3000});
+      },
+  },
+
   data() {
     return {
       products: null,

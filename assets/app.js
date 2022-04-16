@@ -112,6 +112,7 @@ app.config.globalProperties.$appState = reactive({ theme: 'lara-light-indigo', d
 
 app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
 app.use(router)
+app.use(ToastService)
 
 app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);
@@ -120,6 +121,8 @@ app.directive('badge', BadgeDirective);
 app.directive('styleclass', StyleClass);
 
 app.component('Chart', Chart);
+app.component('FileUpload', FileUpload);
+app.component('Toast', Toast)
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')

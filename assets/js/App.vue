@@ -138,6 +138,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  @import '../scss/App.scss';
 </style>
