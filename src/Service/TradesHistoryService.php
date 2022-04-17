@@ -13,9 +13,9 @@ class TradesHistoryService
 {
 
 
-	public const BY_DAY = 'by-day';
-	public const BY_MONTH = 'by-month';
-	public const BY_QUARTER = 'by-quarter';
+	public const BY_DAY = 'day';
+	public const BY_MONTH = 'month';
+	public const BY_QUARTER = 'quarter';
 	
 
 	/** @var \Doctrine\ORM\EntityManagerInterface */
@@ -67,12 +67,12 @@ class TradesHistoryService
 	}
 
 
-	public function getProfitAndLoss()
+	public function getProfitAndLoss($period = self::BY_DAY)
 	{
 		$pl = [];
 
-		foreach ($this->historyRepository->findProfitAndLoss() as $history) {
-			$dateParts = explode(' ', $history['trade_day']);
+		foreach ($this->historyRepository->findProfitAndLoss($period) as $history) {
+			$dateParts = explode(' ', $history['trade_date']);
 
 			$pl[] = [
 				'date' => $dateParts[0],
@@ -83,4 +83,9 @@ class TradesHistoryService
 		return $pl;
 	}
 
+
+	public function countProfitAndLoss()
+	{
+		return $this->historyRepository->countProfitAndLoss();
+	}
 }

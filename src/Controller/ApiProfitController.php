@@ -24,12 +24,19 @@ class ApiProfitController extends AbstractController
 
 
 	/**
-	 * @Route("/api/profit", name="app_api_profit")
+	 * @Route("/api/profit/{period}", name="app_api_profit", methods = {"GET"}, requirements={"page"="\w\-+"})
 	 */
-	public function index(Request $request): Response
+	public function index(Request $request, $period = TradesHistoryService::BY_DAY): Response
 	{
-
-		return $this->json($this->tradesHistoryService->getProfitAndLoss());
+		return $this->json($this->tradesHistoryService->getProfitAndLoss($period));
 	}
 
+	/**
+	 * @Route("/api/profit-loss-count")
+	 * @return [type] [description]
+	 */
+	public function countPositiveNegativeOrders()
+	{
+		return $this->json($this->tradesHistoryService->countProfitAndLoss());
+	}
 }

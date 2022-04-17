@@ -53,19 +53,37 @@ class HistoryRepository extends ServiceEntityRepository
 	/**
 	 * @return array
 	 */
-	public function findProfitAndLoss()
+	public function findProfitAndLoss($period)
 	{
 		$qb = $this->createQueryBuilder('h');
 
 		$qb
-			->select('DATE_TRUNC(\'day\', h.openedAt) as trade_day')
+			->select('DATE_TRUNC(:period, h.openedAt) as trade_date')
 			->addSelect('SUM(h.netProfit) as net_profit')
 		;
 
-		$qb->groupBy('trade_day');
-		$qb->orderBy('DATE_TRUNC(\'day\', h.openedAt)', 'ASC');
+		$qb->setParameter('period', $period);
+
+		$qb
+			->groupBy('trade_date');
+		
+		$qb->orderBy('trade_date', 'ASC');
 
 		return $qb->getQuery()->getResult();
+	}
+
+
+	public function countProfitAndLoss()
+	{
+		$qb = $this->createQueryBuilder('h');
+
+		$qb
+			->select('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as profit')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as loss')
+			->addSelect('COUNT(h.id) as total')
+		;
+
+		return $qb->getQuery()->getOneOrNullResult();
 	}
 
 	// /**

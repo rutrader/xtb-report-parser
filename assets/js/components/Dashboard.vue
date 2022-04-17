@@ -1,6 +1,6 @@
 <template>
   <div class="grid p-fluid">
-    <div class="col-12 lg:col-6 xl:col-3">
+<!--     <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -64,7 +64,7 @@
         <span class="text-500">responded</span>
       </div>
     </div>
-
+ -->
     <div class="col-12 xl:col-6">
       <div class="card">
         <h5>Profit and Loss</h5>
@@ -76,14 +76,14 @@
     
       <div class="card flex flex-column align-items-center">
         <h5 class="align-self-start">Pie Chart</h5>
-        <Chart type="pie" :data="pieData" :options="pieOptions" style="width: 50%" />
+        <Chart ref="pieChart" type="pie" :data="pieData" :options="pieOptions" style="width: 50%" />
       </div>
     </div>
 
     <div class="col-12 lg:col-12">
       <div class="card">
         <h5>Bar Chart</h5>
-        <Chart type="bar" :data="barData" :options="barOptions" />
+        <Chart ref="barChart" type="bar" :data="barData" :options="barOptions" />
       </div>
     </div>
 
@@ -107,34 +107,51 @@ export default {
     onUpload(event) {
       this.$toast.add({severity: 'info', summary: 'Success', detail: JSON.parse(event.xhr.responseText).message, life: 3000});
     },
-    getProfitAndLoss() {
+    getProfitAndLossByDay() {
       let self = this;
 
-      this.axios.get('/api/profit').then((response) => {
-        // self.days = response.json().map(res => res.date)
+      this.axios.get('/api/profit/day').then((response) => {
         self.days = response.data.map(res => res.date);
         self.results = response.data.map(res => res.net_profit);
         
-        // self.$refs.lineChart.data = [1,2,3,4];
-
         self.$refs.lineChart.data.datasets[0].data = self.results
         self.$refs.lineChart.data.labels = self.days
-/*        self.$refs.lineChart.data.datasets.push( {
-          label: 'Revenue',
-          data: [2,3,4,5,6],
-          fill: false,
-          backgroundColor: '#2f4860',
-          borderColor: '#2f4860',
-          tension: 0.4
-        })
-*/
+      })
+    },
+    countProfitAndLoss() {
+      let self = this;
+
+      this.axios.get('/api/profit-loss-count').then((response) => {
+        self.profits = response.data.profit;
+        self.loses = response.data.loss;
+        self.total = response.data.total;
+
+        self.$refs.pieChart.data.datasets[0].data = [self.profits / self.total * 100, self.loses / self.total * 100];
+      })
+    },
+    getProfitAndLossByMonth() {
+      let self = this;
+
+      this.axios.get('/api/profit/month').then((response) => {
+        self.months = response.data.map(res => res.date);
+        self.results = response.data.map(res => res.net_profit);
+        
+        self.$refs.barChart.data.datasets[0].data = self.results
+        self.$refs.barChart.data.labels = self.months;
+
+        for (var i = self.results.length - 1; i >= 0; i--) {
+          console.log(self.results[i]);
+
+          self.$refs.barChart.data.datasets[0].backgroundColor.push(self.results[i] >= 0 ? '#12b000': '#f20033')
+        }
       })
     }
   },
 
   mounted() {
-    this.getProfitAndLoss();
-    let self = this;
+    this.getProfitAndLossByDay();
+    this.countProfitAndLoss();
+    this.getProfitAndLossByMonth();
   },
 
   data() {
@@ -143,10 +160,10 @@ export default {
       products: null,
       profitAndLoss: [],
       days: [],
-      lineDataSets: [
-        
-      ],
       results: [],
+      profits: 0,
+      loses: 0,
+      total: 0,
 
       lineData: {
         labels: [],
@@ -173,37 +190,30 @@ export default {
 
 
       pieData: {
-        labels: ['Profits', 'Loses'],
+        labels: ['Прибыльные сделки', 'Убыточные сделки'],
         datasets: [
           {
-            data: [36, 64],
+            data: [],
             backgroundColor: [
-              "#FF6384",
-              "#36A2EB",
+              "#12b000",
+              "#f20033",
               // "#FFCE56"
             ],
             hoverBackgroundColor: [
-              "#FF6384",
-              "#36A2EB",
+              "#12b000",
+              "#f20033",
               // "#FFCE56"
             ]
           }
         ]
       },
       barData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: [],
         datasets: [
           {
             label: 'Performance by month',
-            backgroundColor: [
-              '#00bb7e',
-              '#FF6384',
-              '#FF6384',
-              '#00bb7e',
-              '#00bb7e',
-              '#00bb7e',
-            ],
-            data: [1, -2, -14, 10, 7, 10]
+            backgroundColor: [],
+            data: []
           },
           /*{
             label: 'My Second dataset',
