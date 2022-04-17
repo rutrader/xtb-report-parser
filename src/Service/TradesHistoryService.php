@@ -11,6 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class TradesHistoryService
 {
+
+
+	public const BY_DAY = 'by-day';
+	public const BY_MONTH = 'by-month';
+	public const BY_QUARTER = 'by-quarter';
 	
 
 	/** @var \Doctrine\ORM\EntityManagerInterface */
@@ -59,6 +64,23 @@ class TradesHistoryService
 		}
 
 		return $history;
+	}
+
+
+	public function getProfitAndLoss()
+	{
+		$pl = [];
+
+		foreach ($this->historyRepository->findProfitAndLoss() as $history) {
+			$dateParts = explode(' ', $history['trade_day']);
+
+			$pl[] = [
+				'date' => $dateParts[0],
+				'net_profit' => (float)$history['net_profit']
+			];
+		}
+
+		return $pl;
 	}
 
 }

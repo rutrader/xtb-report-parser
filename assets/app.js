@@ -93,6 +93,9 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -113,6 +116,7 @@ app.config.globalProperties.$appState = reactive({ theme: 'lara-light-indigo', d
 app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
 app.use(router)
 app.use(ToastService)
+app.use(VueAxios, axios)
 
 app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);

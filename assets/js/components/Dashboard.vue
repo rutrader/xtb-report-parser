@@ -1,6 +1,6 @@
 <template>
   <div class="grid p-fluid">
-    <!-- <div class="col-12 lg:col-6 xl:col-3">
+    <div class="col-12 lg:col-6 xl:col-3">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
@@ -67,12 +67,13 @@
 
     <div class="col-12 xl:col-6">
       <div class="card">
-        <h5>Sales Overview</h5>
-        <Chart type="line" :data="lineData" :options="lineOptions" />
+        <h5>Profit and Loss</h5>
+        <Chart ref="lineChart" type="line" :data="lineData" :options="lineOptions" />
       </div>
     </div>
 
     <div class="col-12 xl:col-6">
+    
       <div class="card flex flex-column align-items-center">
         <h5 class="align-self-start">Pie Chart</h5>
         <Chart type="pie" :data="pieData" :options="pieOptions" style="width: 50%" />
@@ -85,7 +86,7 @@
         <Chart type="bar" :data="barData" :options="barOptions" />
       </div>
     </div>
- -->
+
     <div class="col-12 lg-col-12">
 
       <div class="card">
@@ -95,9 +96,6 @@
         <FileUpload name="report" url="/import" @upload="onUpload" :multiple="false" accept=".csv" :maxFileSize="1000000"/>
       </div>
     </div>
-
-    <Toast />
-    <Button @click="showSuccess()" label="Success" class="p-button-success mr-2" />
 
   </div>
 </template>
@@ -109,35 +107,71 @@ export default {
     onUpload(event) {
       this.$toast.add({severity: 'info', summary: 'Success', detail: JSON.parse(event.xhr.responseText).message, life: 3000});
     },
-    showSuccess() {
-        this.$toast.add({severity:'success', summary: 'Success Message', detail:'Message Detail', life: 3000});
-      },
+    getProfitAndLoss() {
+      let self = this;
+
+      this.axios.get('/api/profit').then((response) => {
+        // self.days = response.json().map(res => res.date)
+        self.days = response.data.map(res => res.date);
+        self.results = response.data.map(res => res.net_profit);
+        
+        // self.$refs.lineChart.data = [1,2,3,4];
+
+        self.$refs.lineChart.data.datasets[0].data = self.results
+        self.$refs.lineChart.data.labels = self.days
+/*        self.$refs.lineChart.data.datasets.push( {
+          label: 'Revenue',
+          data: [2,3,4,5,6],
+          fill: false,
+          backgroundColor: '#2f4860',
+          borderColor: '#2f4860',
+          tension: 0.4
+        })
+*/
+      })
+    }
+  },
+
+  mounted() {
+    this.getProfitAndLoss();
+    let self = this;
   },
 
   data() {
     return {
+      isLoaded: true,
       products: null,
+      profitAndLoss: [],
+      days: [],
+      lineDataSets: [
+        
+      ],
+      results: [],
+
       lineData: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: [],
         datasets: [
           {
-            label: 'Revenue',
-            data: [500, 501, 499, 485, 495, 502, 512, 512, 512, 512, 512, 512],
+            label: 'Net profit',
+            data: [],
             fill: false,
             backgroundColor: '#2f4860',
             borderColor: '#2f4860',
-            tension: 0.4
+            tension: 0.1
           },
-          /*{
-            label: 'Sales',
-            data: [28, 48, 40, 19, 86, 27, 90],
-            fill: false,
-            backgroundColor: '#00bb7e',
-            borderColor: '#00bb7e',
-            tension: 0.4
-          }*/
         ]
       },
+
+      lineOptions: {
+        scales: {
+          y: {
+            min: -300,
+            max: 300
+          }
+        }
+      },
+
+
       pieData: {
         labels: ['Profits', 'Loses'],
         datasets: [
@@ -182,7 +216,8 @@ export default {
         {label: 'Add New', icon: 'pi pi-fw pi-plus'},
         {label: 'Remove', icon: 'pi pi-fw pi-minus'}
       ],
-      lineOptions: null,
+      barOptions: null,
+      pieOptions: null,
     }
   }
 }
@@ -191,3 +226,4 @@ export default {
 <style scoped>
 
 </style>
+c
