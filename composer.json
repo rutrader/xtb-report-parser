@@ -15,6 +15,7 @@
         "doctrine/orm": "^2.11",
         "gregwar/captcha-bundle": "^2.2",
         "hidehalo/nanoid-php": "^1.1",
+        "oro/doctrine-extensions": "^2.0",
         "ramsey/uuid-console": "^1.2",
         "ramsey/uuid-doctrine": "^1.8",
         "symfony/console": "5.4.*",

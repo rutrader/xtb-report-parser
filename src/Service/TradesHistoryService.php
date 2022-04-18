@@ -34,10 +34,10 @@ class TradesHistoryService
 	
 	/**
 	 * @param array $data
-	 * @param bool|boolean $doFlush
+	 * @param bool $doFlush
 	 * @return \App\Entity\Trades\History
 	 */
-	public function create(array $data, bool $doFlush = true)
+	public function create(array $data, bool $doFlush = true): History
 	{
 		
 		$history = new History();
@@ -83,10 +83,72 @@ class TradesHistoryService
 	
 	/**
 	 * @return int|mixed|string|null
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	public function getStats()
 	{
 		return $this->historyRepository->getStats();
 	}
 	
+	/**
+	 * @param bool $separateByMonths
+	 * @return array
+	 */
+	public function profitByHours(bool $separateByMonths = true): array
+	{
+		$stats = [];
+		
+		foreach ($this->historyRepository->statsByHours() as $profitByHour) {
+			$stats[$profitByHour['month']][] = [
+				'time_start' => $profitByHour['time_start'],
+				'time_end' => $profitByHour['time_end'],
+				'time_range' => mb_strcut($profitByHour['time_start'], 0, -3) . ' - '. mb_strcut($profitByHour['time_end'], 0, -3),
+				'profit' => $profitByHour['profit'],
+				'trade_counter' => $profitByHour['trade_counter'],
+				'winners' => $profitByHour['winners'],
+				'losers' => $profitByHour['losers']
+			];
+		}
+		return $stats;
+	}
+	
+	/**
+	 * @param bool $separateByMonths
+	 * @return array
+	 */
+	public function statsByDays(bool $separateByMonths = true): array
+	{
+		$stats = [];
+		
+		foreach ($this->historyRepository->statsByDays() as $byDay) {
+			$stats[$byDay['month']][] = [
+				'trade_day' => $byDay['trade_day'],
+				'profit' => $byDay['profit'],
+				'trade_counter' => $byDay['trade_counter'],
+				'winners' => $byDay['winners'],
+				'losers' => $byDay['losers']
+			];
+		}
+		return $stats;
+	}
+	
+	/**
+	 * @param bool $separateByMonths
+	 * @return array
+	 */
+	public function statsByMonths(bool $separateByMonths = true): array
+	{
+		$stats = [];
+		
+		foreach ($this->historyRepository->statsByMonths() as $byMonth) {
+			$stats[$byMonth['month']][] = [
+				'profit' => $byMonth['profit'],
+				'trade_counter' => $byMonth['trade_counter'],
+				'winners' => $byMonth['winners'],
+				'losers' => $byMonth['losers'],
+			];
+		}
+		
+		return $stats;
+	}
 }

@@ -8,6 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
+use function Ramsey\Uuid\v1;
 
 /**
  * @method History|null find($id, $lockMode = null, $lockVersion = null)
@@ -51,9 +52,10 @@ class HistoryRepository extends ServiceEntityRepository
 	}
 	
 	/**
+	 * @param string $period
 	 * @return array
 	 */
-	public function findProfitAndLoss($period)
+	public function findProfitAndLoss(string $period): array
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -96,17 +98,91 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('SUM(CASE WHEN LOWER(order_type.alias) like :buy THEN 1 ELSE 0 END) as buy_orders')
 			->addSelect('SUM(CASE WHEN LOWER(order_type.alias) like :sell THEN 1 ELSE 0 END) as sell_orders')
 			->addSelect('SUM(h.netProfit) as pl')
-			->addSelect('COUNT(h.id) as total_orders')
-		;
+			->addSelect('COUNT(h.id) as total_orders');
 		
 		$qb->join('h.orderType', 'order_type');
 		
 		$qb
 			->setParameter('buy', 'buy%')
-			->setParameter('sell', 'sell%')
-		;
+			->setParameter('sell', 'sell%');
 		
 		return $qb->getQuery()->getOneOrNullResult();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function statsByHours(): array
+	{
+		$qb = $this->createQueryBuilder('h');
+		
+		$qb
+			->select('MONTH(DATE_TRUNC(\'month\', h.openedAt)) as month')
+			->addSelect('CAST(DATE_TRUNC(\'hour\', h.openedAt) as time) as time_start')
+			->addSelect('CAST(DATE_TRUNC(\'hour\', DATE_ADD(h.openedAt, 1, \'hour\')) as time) as time_end')
+//			->addSelect('CONCAT(CAST(DATE_TRUNC(\'hour\', h.openedAt) as time), \'-\', CAST(DATE_TRUNC(\'hour\', DATE_ADD(h.openedAt, 1, \'hour\')) as time)) as range')
+			->addSelect('SUM(h.netProfit) as profit')
+			->addSelect('COUNT(h.id) as trade_counter')
+			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb
+			->addOrderBy('month', 'ASC')
+			->addOrderBy('time_start');
+		
+		$qb
+			->groupBy('month')
+			->addGroupBy('time_start')
+			->addGroupBy('time_end');
+		
+		return $qb->getQuery()->getResult();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function statsByDays(): array
+	{
+		$qb = $this->createQueryBuilder('h');
+		
+		$qb
+			->select('MONTH(DATE_TRUNC(\'month\', h.openedAt)) as month')
+			->addSelect('CAST(DATE_TRUNC(\'day\', h.openedAt) as date) as trade_day')
+			->addSelect('SUM(h.netProfit) as profit')
+			->addSelect('COUNT(h.id) as trade_counter')
+			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb
+			->addOrderBy('month', 'ASC')
+			->addOrderBy('trade_day');
+		
+		$qb
+			->groupBy('month')
+			->addGroupBy('trade_day');
+		
+		return $qb->getQuery()->getResult();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function statsByMonths(): array
+	{
+		$qb = $this->createQueryBuilder('h');
+		
+		$qb
+			->select('MONTH(DATE_TRUNC(\'month\', h.openedAt)) as month')
+			->addSelect('SUM(h.netProfit) as profit')
+			->addSelect('COUNT(h.id) as trade_counter')
+			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb->addOrderBy('month', 'ASC');
+		
+		$qb->groupBy('month');
+		
+		return $qb->getQuery()->getResult();
 	}
 	
 	// /**

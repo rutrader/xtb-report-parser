@@ -124,6 +124,7 @@ app.directive('ripple', Ripple);
 app.directive('badge', BadgeDirective);
 app.directive('styleclass', StyleClass);
 
+app.component('Badge', Badge);
 app.component('Chart', Chart);
 app.component('FileUpload', FileUpload);
 app.component('Toast', Toast)

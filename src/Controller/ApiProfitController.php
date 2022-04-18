@@ -37,10 +37,38 @@ class ApiProfitController extends AbstractController
 	/**
 	 * @Route("/api/trades/stats", methods={"GET"})
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
 	public function stats(): JsonResponse
 	{
 		return $this->json($this->tradesHistoryService->getStats());
+	}
+	
+	/**
+	 * @Route (name="api_profit_by_hours", path="/api/net-profit/by-hours")
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 */
+	public function profitByHours(): JsonResponse
+	{
+		return $this->json($this->tradesHistoryService->profitByHours());
+	}
+	
+	/**
+	 * @Route (name="api_profit_by_days", path="/api/time-stats/by-days")
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 */
+	public function statsByDays(): JsonResponse
+	{
+		return $this->json($this->tradesHistoryService->statsByDays());
+	}
+	
+	/**
+	 * @Route (name="api_stats_by_days", path="/api/time-stats/by-months")
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 */
+	public function statsByMonths(): JsonResponse
+	{
+		return $this->json($this->tradesHistoryService->statsByMonths());
 	}
 	
 }

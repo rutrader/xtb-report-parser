@@ -20,6 +20,8 @@ doctrine:
                 date_trunc: DoctrineExtensions\Query\Postgresql\DateTrunc
                 month: DoctrineExtensions\Query\Postgresql\Month
                 day: DoctrineExtensions\Query\Postgresql\Day
+            string_functions:
+                cast: Oro\ORM\Query\AST\Functions\Cast
 
 when@test:
     doctrine:

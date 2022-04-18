@@ -4,9 +4,9 @@
 
       <AppTopBar @menu-toggle="onMenuToggle" />
 
-<!--      <div class="layout-sidebar" @click="onSidebarClick">
+      <div class="layout-sidebar" @click="onSidebarClick">
         <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
-      </div>-->
+      </div>
 
       <div class="layout-main">
         <router-view />
@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      layoutMode: 'overlay', //static
+      layoutMode: 'static', //overlay
       staticMenuInactive: false,
       overlayMenuActive: false,
       mobileMenuActive: false,
@@ -41,10 +41,13 @@ export default {
           }]
         },
         {
-          label: 'Trades by time',
-          items: [{
-            label: 'Ordered by time', icon: 'fa-thin fa-clock-five', to: '/by-time'
-          }]
+          label: 'Time stats',
+          items: [
+            {label: 'By hours', icon: 'fa-thin fa-clock-five', to: '/time-stats/by-hours'},
+            {label: 'By days', icon: 'fa-thin fa-calendar-day', to: '/time-stats/by-days'},
+            {label: 'By Months', icon: 'fa-thin fa-calendar-day', to: '/time-stats/by-months'}
+            // {label: 'By days', icon: 'fa-thin fa-chart-mixed', to: '/time-stats/win-loss'}
+          ]
         }
         /*{
           label: 'Pages', icon: 'pi pi-fw pi-clone',
@@ -139,5 +142,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../scss/App.scss';
+@import '../scss/App.scss';
 </style>
