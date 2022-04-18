@@ -18,6 +18,8 @@ doctrine:
         dql:
             datetime_functions:
                 date_trunc: DoctrineExtensions\Query\Postgresql\DateTrunc
+                month: DoctrineExtensions\Query\Postgresql\Month
+                day: DoctrineExtensions\Query\Postgresql\Day
 
 when@test:
     doctrine:

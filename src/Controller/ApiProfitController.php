@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Service\TradesHistoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,16 +14,18 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ApiProfitController extends AbstractController
 {
-
-
+	
+	/** @var \App\Service\TradesHistoryService */
 	private $tradesHistoryService;
-
+	
+	/**
+	 * @param \App\Service\TradesHistoryService $tradesHistoryService
+	 */
 	public function __construct(TradesHistoryService $tradesHistoryService)
 	{
 		$this->tradesHistoryService = $tradesHistoryService;
 	}
-
-
+	
 	/**
 	 * @Route("/api/profit/{period}", name="app_api_profit", methods = {"GET"}, requirements={"page"="\w\-+"})
 	 */
@@ -30,13 +33,14 @@ class ApiProfitController extends AbstractController
 	{
 		return $this->json($this->tradesHistoryService->getProfitAndLoss($period));
 	}
-
+	
 	/**
-	 * @Route("/api/profit-loss-count")
-	 * @return [type] [description]
+	 * @Route("/api/trades/stats", methods={"GET"})
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
-	public function countPositiveNegativeOrders()
+	public function stats(): JsonResponse
 	{
-		return $this->json($this->tradesHistoryService->countProfitAndLoss());
+		return $this->json($this->tradesHistoryService->getStats());
 	}
+	
 }

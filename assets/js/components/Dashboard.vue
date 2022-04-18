@@ -1,70 +1,72 @@
 <template>
   <div class="grid p-fluid">
-<!--     <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0">
+
+    <Toast />
+
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="card mb-0" v-if="this.stats.total_orders">
         <div class="flex justify-content-between mb-3">
           <div>
             <span class="block text-500 font-medium mb-3">Trades</span>
-            <div class="text-900 font-medium text-xl">152</div>
+            <div class="text-900 font-medium text-xl">{{ this.stats.total_orders }}</div>
           </div>
           <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
                style="width:2.5rem;height:2.5rem">
-            <i class="pi pi-shopping-cart text-blue-500 text-xl"></i>
+            <i class="fa-light fa-sigma text-blue-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">24 new </span>
-        <span class="text-500">since last visit</span>
+<!--        <span class="text-green-500 font-medium">24 new </span>-->
+<!--        <span class="text-500">since last visit</span>-->
       </div>
     </div>
-    <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0">
+    <div class="col-12 lg:col-6 xl:col-3" >
+      <div class="card mb-0" v-if="this.stats.buy_orders">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">Buy</span>
-            <div class="text-900 font-medium text-xl">100</div>
+            <span class="block text-500 font-medium mb-3">Buy orders</span>
+            <div class="text-900 font-medium text-xl">{{ this.stats.buy_orders }}</div>
           </div>
           <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
                style="width:2.5rem;height:2.5rem">
-            <i class="pi pi-map-marker text-orange-500 text-xl"></i>
+            <i class="fa-light fa-arrow-trend-up text-green-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">%52+ </span>
-        <span class="text-500">since last week</span>
+<!--        <span class="text-green-500 font-medium">%52+ </span>-->
+<!--        <span class="text-500">since last week</span>-->
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0">
+      <div class="card mb-0" v-if="this.stats.sell_orders">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">Sell</span>
-            <div class="text-900 font-medium text-xl">52</div>
+            <span class="block text-500 font-medium mb-3">Sell orders</span>
+            <div class="text-900 font-medium text-xl">{{ this.stats.sell_orders }}</div>
           </div>
           <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
                style="width:2.5rem;height:2.5rem">
-            <i class="pi pi-inbox text-cyan-500 text-xl"></i>
+            <i class="fa-light fa-arrow-trend-down text-orange-500 text-xl"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">520  </span>
-        <span class="text-500">newly registered</span>
+<!--        <span class="text-green-500 font-medium">520  </span>-->
+<!--        <span class="text-500">newly registered</span>-->
       </div>
     </div>
     <div class="col-12 lg:col-6 xl:col-3">
-      <div class="card mb-0">
+      <div class="card mb-0" v-if="this.stats.pl">
         <div class="flex justify-content-between mb-3">
           <div>
             <span class="block text-500 font-medium mb-3">P/L</span>
-            <div class="text-900 font-medium text-xl">$12</div>
+            <div class="text-900 font-medium text-xl">{{ parseFloat(this.stats.pl).toFixed(2) }}</div>
           </div>
-          <div class="flex align-items-center justify-content-center bg-purple-100 border-round"
+          <div class="flex align-items-center justify-content-center bg-teal-100 border-round"
                style="width:2.5rem;height:2.5rem">
-            <i class="pi pi-comment text-purple-500 text-xl"></i>
+            <i class="fa-light fa-sack-dollar text-blue-500"></i>
           </div>
         </div>
-        <span class="text-green-500 font-medium">85 </span>
-        <span class="text-500">responded</span>
+<!--        <span class="text-green-500 font-medium">85 </span>-->
+<!--        <span class="text-500">responded</span>-->
       </div>
     </div>
- -->
     <div class="col-12 xl:col-6">
       <div class="card">
         <h5>Profit and Loss</h5>
@@ -73,7 +75,7 @@
     </div>
 
     <div class="col-12 xl:col-6">
-    
+
       <div class="card flex flex-column align-items-center">
         <h5 class="align-self-start">Pie Chart</h5>
         <Chart ref="pieChart" type="pie" :data="pieData" :options="pieOptions" style="width: 50%" />
@@ -93,7 +95,13 @@
 
         <h5>Advanced</h5>
 
-        <FileUpload name="report" url="/import" @upload="onUpload" :multiple="false" accept=".csv" :maxFileSize="1000000"/>
+        <FileUpload name="report"
+                    url="/import"
+                    @upload="onUpload"
+                    @error="onFileUploadError"
+                    :multiple="false"
+                    accept=".csv"
+                    :maxFileSize="1000000" />
       </div>
     </div>
 
@@ -104,45 +112,71 @@
 export default {
   name: "Dashboard",
   methods: {
-    onUpload(event) {
-      this.$toast.add({severity: 'info', summary: 'Success', detail: JSON.parse(event.xhr.responseText).message, life: 3000});
+
+    showSuccess() {
+      this.$toast.add({severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000});
     },
+
+    onFileUploadError(event) {
+      this.$toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: JSON.parse(event.xhr.responseText).message,
+        life: 3000
+      });
+    },
+
+    onUpload(event) {
+      this.$toast.add({
+        severity: 'info',
+        summary: 'Success',
+        detail: JSON.parse(event.xhr.responseText).message,
+        life: 3000
+      });
+    },
+
     getProfitAndLossByDay() {
       let self = this;
 
       this.axios.get('/api/profit/day').then((response) => {
-        self.days = response.data.map(res => res.date);
+        self.dates = response.data.map(res => res.date);
         self.results = response.data.map(res => res.net_profit);
-        
+
         self.$refs.lineChart.data.datasets[0].data = self.results
-        self.$refs.lineChart.data.labels = self.days
+        self.$refs.lineChart.data.labels = self.dates
       })
     },
-    countProfitAndLoss() {
+
+    getStats() {
       let self = this;
 
-      this.axios.get('/api/profit-loss-count').then((response) => {
-        self.profits = response.data.profit;
-        self.loses = response.data.loss;
-        self.total = response.data.total;
+      this.axios.get('/api/trades/stats').then((response) => {
 
-        self.$refs.pieChart.data.datasets[0].data = [self.profits / self.total * 100, self.loses / self.total * 100];
+        self.stats = response.data;
+
+        self.$refs.pieChart.data.datasets[0].data = [self.stats.profit_orders / self.stats.total_orders * 100, self.stats.loss_orders / self.stats.total_orders * 100];
       })
     },
+
     getProfitAndLossByMonth() {
       let self = this;
 
       this.axios.get('/api/profit/month').then((response) => {
-        self.months = response.data.map(res => res.date);
-        self.results = response.data.map(res => res.net_profit);
-        
+        self.results = new Array(self.months.length);
+        self.results.fill(0);
+
+        response.data.map(res => {
+          self.results[res.date - 1] = res.net_profit;
+        })
+
+        // self.dates = response.data.map(res => res.date);
+        // self.results = response.data.map(res => res.net_profit);
+
         self.$refs.barChart.data.datasets[0].data = self.results
         self.$refs.barChart.data.labels = self.months;
 
-        for (var i = self.results.length - 1; i >= 0; i--) {
-          console.log(self.results[i]);
-
-          self.$refs.barChart.data.datasets[0].backgroundColor.push(self.results[i] >= 0 ? '#12b000': '#f20033')
+        for (let i = 0; i <= self.results.length; i++) {
+          self.$refs.barChart.data.datasets[0].backgroundColor.push(self.results[i] >= 0 ? '#12b000' : '#f20033')
         }
       })
     }
@@ -150,21 +184,19 @@ export default {
 
   mounted() {
     this.getProfitAndLossByDay();
-    this.countProfitAndLoss();
+    this.getStats();
     this.getProfitAndLossByMonth();
   },
 
   data() {
     return {
-      isLoaded: true,
-      products: null,
-      profitAndLoss: [],
-      days: [],
+      dates: [],
       results: [],
+      stats: [],
       profits: 0,
       loses: 0,
       total: 0,
-
+      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
       lineData: {
         labels: [],
         datasets: [
@@ -182,8 +214,8 @@ export default {
       lineOptions: {
         scales: {
           y: {
-            min: -300,
-            max: 300
+            min: -1000,
+            max: 1000
           }
         }
       },

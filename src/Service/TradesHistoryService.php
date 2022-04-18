@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Trades\History;
-use App\Entity\Types\Order;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -11,22 +10,19 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class TradesHistoryService
 {
-
-
+	
 	public const BY_DAY = 'day';
+	
 	public const BY_MONTH = 'month';
+	
 	public const BY_QUARTER = 'quarter';
 	
-
 	/** @var \Doctrine\ORM\EntityManagerInterface */
 	private $em;
-
+	
 	/** @var \App\Repository\Trades\HistoryRepository */
 	private $historyRepository;
-
-	/** @var \App\Repository\Types\OrderRepository */
-	private $orderTypeRepository;
-
+	
 	/**
 	 * @param \Doctrine\ORM\EntityManagerInterface $em
 	 */
@@ -34,17 +30,16 @@ class TradesHistoryService
 	{
 		$this->em = $em;
 		$this->historyRepository = $em->getRepository(History::class);
-		$this->orderTypeRepository = $em->getRepository(Order::class);
 	}
-
+	
 	/**
-	 * @param  array        $data
-	 * @param  bool|boolean $doFlush
+	 * @param array $data
+	 * @param bool|boolean $doFlush
 	 * @return \App\Entity\Trades\History
 	 */
 	public function create(array $data, bool $doFlush = true)
 	{
-
+		
 		$history = new History();
 		$history->setSymbol(mb_strtolower($data['symbol']));
 		$history->setLots($data['lots']);
@@ -56,36 +51,42 @@ class TradesHistoryService
 		$history->setNetProfit($data['netProfit']);
 		$history->setOrderType($data['orderType']);
 		$history->setMarketType($data['market']);
-
+		
 		$this->em->persist($history);
-
-		if($doFlush) {
+		
+		if ($doFlush) {
 			$this->em->flush();
 		}
-
+		
 		return $history;
 	}
-
-
-	public function getProfitAndLoss($period = self::BY_DAY)
+	
+	/**
+	 * @param string $period
+	 * @return array
+	 */
+	public function getProfitAndLoss(string $period = self::BY_DAY): array
 	{
 		$pl = [];
-
+		
 		foreach ($this->historyRepository->findProfitAndLoss($period) as $history) {
 			$dateParts = explode(' ', $history['trade_date']);
-
+			
 			$pl[] = [
 				'date' => $dateParts[0],
-				'net_profit' => (float)$history['net_profit']
+				'net_profit' => (float)$history['net_profit'],
 			];
 		}
-
+		
 		return $pl;
 	}
-
-
-	public function countProfitAndLoss()
+	
+	/**
+	 * @return int|mixed|string|null
+	 */
+	public function getStats()
 	{
-		return $this->historyRepository->countProfitAndLoss();
+		return $this->historyRepository->getStats();
 	}
+	
 }
