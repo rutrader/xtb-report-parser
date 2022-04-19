@@ -26,6 +26,11 @@ const routes = [
 				path: '/time-stats/by-months',
 				name: 'time-stats-by-months',
 				component: () => import('./components/TimeStats/ByMonths')
+			},
+			{
+				path: '/stats/by-markets',
+				name: 'stats-by-markets',
+				component: () => import('./components/CommonStats/ByMarkets')
 			}
 		]
 	}

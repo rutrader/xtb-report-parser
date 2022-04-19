@@ -185,6 +185,34 @@ class HistoryRepository extends ServiceEntityRepository
 		return $qb->getQuery()->getResult();
 	}
 	
+	/**
+	 * @return int|mixed|string
+	 */
+	public function statsByMarkets()
+	{
+		$qb = $this->createQueryBuilder('h');
+		
+		$qb
+			->select('MONTH(DATE_TRUNC(\'month\', h.openedAt)) as month')
+			->addSelect('SUM(h.netProfit) as profit')
+			->addSelect('market_type.name as market')
+			->addSelect('COUNT(market_type.id) as market_counter')
+			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers')
+		;
+		
+		$qb->join('h.marketType', 'market_type');
+		
+		$qb
+			->groupBy('market')
+			->addGroupBy('month')
+		;
+		
+		$qb->orderBy('month');
+		
+		return $qb->getQuery()->getResult();
+	}
+	
 	// /**
 	//  * @return History[] Returns an array of History objects
 	//  */

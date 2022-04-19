@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
  */
-class ApiProfitController extends AbstractController
+class ApiStatsController extends AbstractController
 {
 	
 	/** @var \App\Service\TradesHistoryService */
@@ -63,12 +63,21 @@ class ApiProfitController extends AbstractController
 	}
 	
 	/**
-	 * @Route (name="api_stats_by_days", path="/api/time-stats/by-months")
+	 * @Route (name="api_stats_by_months", path="/api/time-stats/by-months")
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
 	public function statsByMonths(): JsonResponse
 	{
 		return $this->json($this->tradesHistoryService->statsByMonths());
+	}
+	
+	/**
+	 * @Route(name="api_stats_by_markets", path="/api/market-stats")
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 */
+	public function statsByMarkets(): JsonResponse
+	{
+		return $this->json($this->tradesHistoryService->statsByMarkets());
 	}
 	
 }

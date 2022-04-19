@@ -151,4 +151,25 @@ class TradesHistoryService
 		
 		return $stats;
 	}
+	
+	/**
+	 * @param bool $separateByMonths
+	 * @return array
+	 */
+	public function statsByMarkets(bool $separateByMonths = true): array
+	{
+		$stats = [];
+		
+		foreach ($this->historyRepository->statsByMarkets() as $byMarket) {
+			$stats[$byMarket['month']][] = [
+				'profit' => $byMarket['profit'],
+				'market' => $byMarket['market'],
+				'market_counter' => $byMarket['market_counter'],
+				'winners' => $byMarket['winners'],
+				'losers' => $byMarket['losers'],
+			];
+		}
+		
+		return $stats;
+	}
 }
