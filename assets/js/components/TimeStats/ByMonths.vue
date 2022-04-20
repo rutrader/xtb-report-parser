@@ -51,8 +51,6 @@ export default {
               },
             ]
           };
-
-          console.log(result[0].winners / result[0].trade_counter * 100, result[0].losers / result[0].trade_counter * 100);
         });
       })
 

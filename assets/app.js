@@ -129,5 +129,8 @@ app.component('Chart', Chart);
 app.component('FileUpload', FileUpload);
 app.component('Toast', Toast)
 
+app.component('DataTable', DataTable);
+app.component('Column', Column)
+
 // app.component('font-awesome-icon', FontAwesomeIcon)
 app.mount('#app')

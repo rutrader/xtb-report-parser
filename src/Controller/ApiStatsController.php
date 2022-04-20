@@ -75,9 +75,9 @@ class ApiStatsController extends AbstractController
 	 * @Route(name="api_stats_by_markets", path="/api/market-stats")
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
-	public function statsByMarkets(): JsonResponse
+	public function statsByMarkets($fields = ''): JsonResponse
 	{
-		return $this->json($this->tradesHistoryService->statsByMarkets());
+		return $this->json($this->tradesHistoryService->statsByMarkets(true, explode(',', $fields)));
 	}
 	
 }
