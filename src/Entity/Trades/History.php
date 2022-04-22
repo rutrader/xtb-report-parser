@@ -4,6 +4,7 @@ namespace App\Entity\Trades;
 
 use App\Entity\Types\Market;
 use App\Entity\Types\Order;
+use App\Entity\Users\User;
 use App\Repository\Trades\HistoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -84,8 +85,21 @@ class History
 	 */
 	private $marketType;
 	
+	/**
+	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trades")
+	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+	 */
+	private $trader;
+	
+	/**
+	 * @ORM\Column(type="datetime_immutable", nullable=true)
+	 * @var \DateTimeImmutable
+	 */
+	private $importedAt;
+	
 	public function __construct()
 	{
+		$this->importedAt = new \DateTimeImmutable;
 		$this->profit = 0.0;
 		$this->netProfit = 0.0;
 	}
@@ -284,6 +298,44 @@ class History
 	public function setMarketType(?Market $marketType): self
 	{
 		$this->marketType = $marketType;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return \App\Entity\Users\User|null
+	 */
+	public function getTrader(): ?User
+	{
+		return $this->trader;
+	}
+	
+	/**
+	 * @param \App\Entity\Users\User|null $trader
+	 * @return $this
+	 */
+	public function setTrader(?User $trader): self
+	{
+		$this->trader = $trader;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return \DateTimeImmutable|null
+	 */
+	public function getImportedAt(): ?\DateTimeImmutable
+	{
+		return $this->importedAt;
+	}
+	
+	/**
+	 * @param \DateTimeImmutable $importedAt
+	 * @return $this
+	 */
+	public function setImportedAt(\DateTimeImmutable $importedAt): self
+	{
+		$this->importedAt = $importedAt;
 		
 		return $this;
 	}

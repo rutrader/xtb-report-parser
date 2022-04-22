@@ -2,7 +2,10 @@
 
 namespace App\Entity\Users;
 
+use App\Entity\Trades\History;
 use App\Repository\Users\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -46,8 +49,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	
 	/**
 	 * @ORM\Column(type="boolean")
+	 * @var bool
 	 */
 	private $isVerified = false;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity=History::class, mappedBy="trader")
+	 * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Trades\History[]
+	 */
+	private $trades;
+	
+	public function __construct()
+	{
+		$this->trades = new ArrayCollection();
+	}
 	
 	/**
 	 * @return string|null
@@ -171,6 +186,44 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	public function setIsVerified(bool $isVerified): self
 	{
 		$this->isVerified = $isVerified;
+		
+		return $this;
+	}
+	
+	/**
+	 * @return Collection<int, History>
+	 */
+	public function getTrades(): Collection
+	{
+		return $this->trades;
+	}
+	
+	/**
+	 * @param \App\Entity\Trades\History $trade
+	 * @return $this
+	 */
+	public function addTrade(History $trade): self
+	{
+		if (!$this->trades->contains($trade)) {
+			$this->trades[] = $trade;
+			$trade->setTrader($this);
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * @param \App\Entity\Trades\History $trade
+	 * @return $this
+	 */
+	public function removeTrade(History $trade): self
+	{
+		if ($this->trades->removeElement($trade)) {
+			// set the owning side to null (unless already changed)
+			if ($trade->getTrader() === $this) {
+				$trade->setTrader(null);
+			}
+		}
 		
 		return $this;
 	}

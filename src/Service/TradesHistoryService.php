@@ -52,6 +52,9 @@ class TradesHistoryService
 		$history->setOrderType($data['orderType']);
 		$history->setMarketType($data['market']);
 		
+		$history->setTrader($data['user']);
+		$history->setImportedAt($data['importedAt']);
+		
 		$this->em->persist($history);
 		
 		if ($doFlush) {

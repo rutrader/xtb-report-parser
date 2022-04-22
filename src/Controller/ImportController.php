@@ -46,11 +46,17 @@ class ImportController extends AbstractController
 	 */
 	public function index(Request $request): Response
 	{
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		
+		$user = $this->getUser();
+		
 		$imported = 0;
 		
 		if (($handle = fopen($request->files->get('report')->getPathname(), 'rb')) !== false) {
 			
 			$row = 0;
+			
+			$importedDate = new DateTimeImmutable;
 			
 			while (($data = fgetcsv($handle, 1000, ';')) !== false) {
 				$row++;
@@ -72,6 +78,8 @@ class ImportController extends AbstractController
 						'netProfit' => (float)$data[9],
 						'comment' => $data[10],
 						'market' => $this->marketTypeService->getMarketBySymbol($data[0]),
+						'user' => $this->getUser(),
+						'importedAt' => $importedDate,
 					], false);
 					
 					$imported++;
