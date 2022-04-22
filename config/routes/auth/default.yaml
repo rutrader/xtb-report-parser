@@ -1,0 +1,16 @@
+app_auth_register:
+  path: /register
+  controller: App\Controller\RegistrationController::register
+
+app_verify_email:
+  path: /verify/email
+  controller: App\Controller\RegistrationController::verifyUserEmail
+  methods: 'POST'
+
+app_auth_login:
+  path: /login
+  controller: App\Controller\LoginController::index
+
+app_auth_logout:
+  path: /logout
+  methods: GET

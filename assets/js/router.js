@@ -8,6 +8,12 @@ const routes = [
 		component: App,
 		children: [
 			{
+				path: '/:pathMatch(.*)*',
+				name: 'NotFound',
+				component: () => import('./components/NotFound')
+			},
+			
+			{
 				path: '',
 				name: 'dashboard',
 				component: () => import('./components/Dashboard')
@@ -31,7 +37,7 @@ const routes = [
 				path: '/stats/by-markets',
 				name: 'stats-by-markets',
 				component: () => import('./components/CommonStats/ByMarkets')
-			}
+			},
 		]
 	}
 ]

@@ -4,7 +4,7 @@ import 'primeflex/primeflex.css';
 import 'prismjs/themes/prism-coy.css';
 import '../assets/styles/layout.scss';
 
-import { createApp, reactive } from 'vue'
+import {createApp, reactive} from 'vue'
 import router from './js/router';
 import AppWrapper from './js/MainWrapper';
 import PrimeVue from 'primevue/config';
@@ -101,36 +101,38 @@ import VueAxios from 'vue-axios';
 
 // Vue.config.productionTip = false;
 
-router.beforeEach(function(to, from, next) {
-	window.scrollTo(0, 0);
-	next();
-});
-
-
-const app = createApp(AppWrapper)
-
-app.config.globalProperties.$appState = reactive({ theme: 'lara-light-indigo', darkTheme: false });
+if (document.getElementById('app')) {
+	router.beforeEach(function (to, from, next) {
+		window.scrollTo(0, 0);
+		next();
+	});
+	
+	
+	const app = createApp(AppWrapper)
+	
+	app.config.globalProperties.$appState = reactive({theme: 'lara-light-indigo', darkTheme: false});
 
 // app.config.compilerOptions.delimiters = ['${', '}']
-
-app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
-app.use(router)
-app.use(ToastService)
-app.use(VueAxios, axios)
-
-app.directive('tooltip', Tooltip);
-app.directive('ripple', Ripple);
+	
+	app.use(PrimeVue, {ripple: true, inputStyle: 'outlined'});
+	app.use(router)
+	app.use(ToastService)
+	app.use(VueAxios, axios)
+	
+	app.directive('tooltip', Tooltip);
+	app.directive('ripple', Ripple);
 // app.directive('code', CodeHighlight);
-app.directive('badge', BadgeDirective);
-app.directive('styleclass', StyleClass);
-
-app.component('Badge', Badge);
-app.component('Chart', Chart);
-app.component('FileUpload', FileUpload);
-app.component('Toast', Toast)
-
-app.component('DataTable', DataTable);
-app.component('Column', Column)
+	app.directive('badge', BadgeDirective);
+	app.directive('styleclass', StyleClass);
+	
+	app.component('Badge', Badge);
+	app.component('Chart', Chart);
+	app.component('FileUpload', FileUpload);
+	app.component('Toast', Toast)
+	
+	app.component('DataTable', DataTable);
+	app.component('Column', Column)
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
-app.mount('#app')
+	app.mount('#app')
+}

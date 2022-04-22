@@ -5,9 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Trades\History;
 use App\Service\TradesHistoryService;
 use App\Service\MarketTypeService;
 use App\Service\OrderTypeService;
@@ -28,6 +26,7 @@ class ImportController extends AbstractController
 	/** @var \App\Service\OrderTypeService */
 	private $orderTypeService;
 	
+	/** @var \App\Service\TradesHistoryService */
 	private $tradesHistoryService;
 	
 	/**
@@ -42,7 +41,8 @@ class ImportController extends AbstractController
 	}
 	
 	/**
-	 * @Route("/import", name="app_import")
+	 * @param \Symfony\Component\HttpFoundation\Request $request
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function index(Request $request): Response
 	{
@@ -51,7 +51,7 @@ class ImportController extends AbstractController
 		if (($handle = fopen($request->files->get('report')->getPathname(), 'rb')) !== false) {
 			
 			$row = 0;
-
+			
 			while (($data = fgetcsv($handle, 1000, ';')) !== false) {
 				$row++;
 				if ($row === 1 || count($data) < 10) {
@@ -86,7 +86,7 @@ class ImportController extends AbstractController
 			}
 		}
 		
-		if($imported > 0) {
+		if ($imported > 0) {
 			$this->em->flush();
 		}
 		

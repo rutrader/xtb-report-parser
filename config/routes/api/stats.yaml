@@ -1,0 +1,28 @@
+app_api_profit:
+  path: /profit/{period}
+  controller: App\Controller\ApiStatsController::index
+  requirements:
+    period: '[\w\-]+'
+
+app_api_stats:
+  path: /trades/stats
+  controller: App\Controller\ApiStatsController::stats
+
+
+api_profit_by_hours:
+  path: /net-profit/by-hours
+  controller: App\Controller\ApiStatsController::profitByHours
+
+
+api_profit_by_days:
+  path: /time-stats/by-days
+  controller: App\Controller\ApiStatsController::statsByDays
+
+api_stats_by_months:
+  path: /time-stats/by-months
+  controller: App\Controller\ApiStatsController::statsByMonths
+
+
+api_stats_by_markets:
+  path: /market-stats
+  controller: App\Controller\ApiStatsController::statsByMarkets
