@@ -1,0 +1,4 @@
+api_trades_overall:
+  path: /trades/overall
+  controller: App\Controller\ApiStatsController::overAll
+

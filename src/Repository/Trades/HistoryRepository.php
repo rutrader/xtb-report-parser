@@ -8,7 +8,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
-use function Ramsey\Uuid\v1;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method History|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,7 +20,7 @@ class HistoryRepository extends ServiceEntityRepository
 {
 	
 	/**
-	 * @param ManagerRegistry $registry [description]
+	 * @param \Doctrine\Persistence\ManagerRegistry $registry [description]
 	 */
 	public function __construct(ManagerRegistry $registry)
 	{
@@ -198,19 +198,30 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('market_type.name as market')
 			->addSelect('COUNT(market_type.id) as market_counter')
 			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
-			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers')
-		;
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
 		
 		$qb->join('h.marketType', 'market_type');
 		
 		$qb
 			->groupBy('market')
-			->addGroupBy('month')
-		;
+			->addGroupBy('month');
 		
 		$qb->orderBy('month');
 		
 		return $qb->getQuery()->getResult();
+	}
+	
+	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
+	 * @return int|mixed|string
+	 */
+	public function removeAll(UserInterface $user)
+	{
+		return $this->createQueryBuilder('h')
+			->delete()
+			->andWhere('h.trader = :user')
+			->setParameter('user', $user)
+			->getQuery()->execute();
 	}
 	
 	// /**

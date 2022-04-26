@@ -1,13 +1,3 @@
-app_api_profit:
-  path: /profit/{period}
-  controller: App\Controller\ApiStatsController::index
-  requirements:
-    period: '[\w\-]+'
-
-app_api_stats:
-  path: /trades/stats
-  controller: App\Controller\ApiStatsController::stats
-
 
 api_profit_by_hours:
   path: /net-profit/by-hours

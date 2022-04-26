@@ -26,20 +26,10 @@ class ApiStatsController extends AbstractController
 	}
 	
 	/**
-	 * @param \Symfony\Component\HttpFoundation\Request $request
-	 * @param string $period
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	public function index(Request $request, string $period = TradesHistoryService::BY_DAY): Response
-	{
-		return $this->json($this->tradesHistoryService->getProfitAndLoss($period));
-	}
-	
-	/**
 	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function stats(): JsonResponse
+	public function overAll(): JsonResponse
 	{
 		return $this->json($this->tradesHistoryService->getStats());
 	}
