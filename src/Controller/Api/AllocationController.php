@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use App\Service\TradesHistoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
  */
-class ApiCumulativeController extends AbstractController
+class AllocationController extends AbstractController
 {
 	
 	/** @var \App\Service\TradesHistoryService */
@@ -25,11 +26,15 @@ class ApiCumulativeController extends AbstractController
 	}
 	
 	/**
-	 * @return \Symfony\Component\HttpFoundation\Response
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
 	 */
-	public function index(): Response
+	public function markets(): JsonResponse
 	{
-		return $this->json($this->tradesHistoryService->getProfitAndLoss(TradesHistoryService::BY_DAY));
+		if(!$user = $this->getUser()) {
+			return $this->json([], Response::HTTP_FORBIDDEN);
+		}
+		
+		return $this->json($this->tradesHistoryService->statsByMarkets($user));
 	}
 	
 }

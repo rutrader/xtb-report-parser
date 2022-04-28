@@ -1,4 +1,0 @@
-app_api_profit_cumulative:
-  path: /profit/cumulative
-  controller: App\Controller\ApiCumulativeController::index
-

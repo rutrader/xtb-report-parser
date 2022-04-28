@@ -52,10 +52,11 @@ class HistoryRepository extends ServiceEntityRepository
 	}
 	
 	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @param string $period
 	 * @return array
 	 */
-	public function findProfitAndLoss(string $period): array
+	public function getTradesResults(UserInterface $user, string $period): array
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -74,7 +75,12 @@ class HistoryRepository extends ServiceEntityRepository
 		$qb
 			->addSelect('SUM(h.netProfit) as net_profit');
 		
-		$qb->setParameter('period', $period);
+		$qb->where('h.trader = :trader');
+		
+		$qb
+			->setParameter('period', $period)
+			->setParameter('trader', $user)
+		;
 		
 		$qb
 			->groupBy('trade_date');
@@ -85,34 +91,40 @@ class HistoryRepository extends ServiceEntityRepository
 	}
 	
 	/**
+	 * @var \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return int|mixed|string|null
 	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function getStats()
+	public function getOverallStats(UserInterface $user)
 	{
 		$qb = $this->createQueryBuilder('h');
 		
 		$qb
-			->select('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as profit_orders')
-			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as loss_orders')
-			->addSelect('SUM(CASE WHEN LOWER(order_type.alias) like :buy THEN 1 ELSE 0 END) as buy_orders')
-			->addSelect('SUM(CASE WHEN LOWER(order_type.alias) like :sell THEN 1 ELSE 0 END) as sell_orders')
-			->addSelect('SUM(h.netProfit) as pl')
-			->addSelect('COUNT(h.id) as total_orders');
+			->select('COALESCE(SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END), 0) as profit_orders')
+			->addSelect('COALESCE(SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END), 0) as loss_orders')
+			->addSelect('COALESCE(SUM(CASE WHEN LOWER(order_type.alias) like :buy THEN 1 ELSE 0 END), 0) as buy_orders')
+			->addSelect('COALESCE(SUM(CASE WHEN LOWER(order_type.alias) like :sell THEN 1 ELSE 0 END), 0) as sell_orders')
+			->addSelect('COALESCE(SUM(h.netProfit), 0) as pl')
+			->addSelect('COALESCE(COUNT(h.id), 0) as total_orders');
 		
 		$qb->join('h.orderType', 'order_type');
 		
+		$qb->andWhere('h.trader = :trader');
+		
+		
 		$qb
 			->setParameter('buy', 'buy%')
-			->setParameter('sell', 'sell%');
+			->setParameter('sell', 'sell%')
+			->setParameter('trader', $user);
 		
 		return $qb->getQuery()->getOneOrNullResult();
 	}
 	
 	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function statsByHours(): array
+	public function statsByHours(UserInterface $user): array
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -125,6 +137,10 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('COUNT(h.id) as trade_counter')
 			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
 			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb->andWhere('h.trader = :trader');
+		
+		$qb->setParameter('trader', $user);
 		
 		$qb
 			->addOrderBy('month', 'ASC')
@@ -139,9 +155,10 @@ class HistoryRepository extends ServiceEntityRepository
 	}
 	
 	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function statsByDays(): array
+	public function statsByDays(UserInterface $user): array
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -152,6 +169,10 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('COUNT(h.id) as trade_counter')
 			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
 			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb->where('h.trader = :trader');
+		
+		$qb->setParameter('trader', $user);
 		
 		$qb
 			->addOrderBy('month', 'ASC')
@@ -167,7 +188,7 @@ class HistoryRepository extends ServiceEntityRepository
 	/**
 	 * @return array
 	 */
-	public function statsByMonths(): array
+	public function statsByMonths(UserInterface $user): array
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -177,6 +198,10 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('COUNT(h.id) as trade_counter')
 			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
 			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb->where('h.trader = :trader');
+		
+		$qb->setParameter('trader', $user);
 		
 		$qb->addOrderBy('month', 'ASC');
 		
@@ -188,7 +213,7 @@ class HistoryRepository extends ServiceEntityRepository
 	/**
 	 * @return int|mixed|string
 	 */
-	public function statsByMarkets()
+	public function statsByMarkets(UserInterface $user)
 	{
 		$qb = $this->createQueryBuilder('h');
 		
@@ -201,6 +226,10 @@ class HistoryRepository extends ServiceEntityRepository
 			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
 		
 		$qb->join('h.marketType', 'market_type');
+		
+		$qb->where('h.trader = :trader');
+		
+		$qb->setParameter('trader', $user);
 		
 		$qb
 			->groupBy('market')

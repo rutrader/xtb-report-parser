@@ -1,0 +1,16 @@
+api_performance_overall:
+  path: /performance/overall
+  controller: App\Controller\Api\PerformanceController::overall
+
+api_performance_monthly:
+  path: /performance/monthly
+  controller: App\Controller\Api\PerformanceController::monthly
+
+api_performance_daily:
+  path: /performance/daily
+  controller: App\Controller\Api\PerformanceController::daily
+
+api_profit_by_hours:
+  path: /performance/hourly
+  controller: App\Controller\Api\PerformanceController::hourly
+

@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "ProfitsByHours",
+  name: "PerformanceHourly",
   data() {
     return {
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -44,7 +44,7 @@ export default {
     getStats() {
       let self = this;
 
-      this.axios.get('/api/net-profit/by-hours').then((response) => {
+      this.axios.get('/api/performance/hourly').then((response) => {
 
         Object.keys(response.data).map((res) => {
           self.barData[res-1] = {

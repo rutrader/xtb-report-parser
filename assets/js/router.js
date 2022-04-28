@@ -19,24 +19,24 @@ const routes = [
 				component: () => import('./components/Dashboard')
 			},
 			{
-				path: '/time-stats/by-hours',
-				name: 'time-stats-by-hours',
-				component: () => import('./components/TimeStats/ByHours')
+				path: '/performance/monthly',
+				name: 'performance-monthly',
+				component: () => import('./components/Performance/Monthly')
 			},
 			{
-				path: '/time-stats/by-days',
-				name: 'time-stats-by-days',
-				component: () => import('./components/TimeStats/ByDays')
+				path: '/performance/daily',
+				name: 'performance-daily',
+				component: () => import('./components/Performance/Daily')
 			},
 			{
-				path: '/time-stats/by-months',
-				name: 'time-stats-by-months',
-				component: () => import('./components/TimeStats/ByMonths')
+				path: '/performance/hourly',
+				name: 'performance-hourly',
+				component: () => import('./components/Performance/Hourly')
 			},
 			{
-				path: '/stats/by-markets',
-				name: 'stats-by-markets',
-				component: () => import('./components/CommonStats/ByMarkets')
+				path: '/allocation/markets',
+				name: 'allocation-by-markets',
+				component: () => import('./components/Allocation/Markets')
 			},
 		]
 	}

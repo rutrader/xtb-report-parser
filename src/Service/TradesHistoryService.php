@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Trades\History;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
@@ -65,14 +66,15 @@ class TradesHistoryService
 	}
 	
 	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @param string $period
 	 * @return array
 	 */
-	public function getProfitAndLoss(string $period = self::BY_DAY): array
+	public function getTradesResults(UserInterface $user, string $period = self::BY_DAY): array
 	{
 		$pl = [];
 		
-		foreach ($this->historyRepository->findProfitAndLoss($period) as $history) {
+		foreach ($this->historyRepository->getTradesResults($user, $period) as $history) {
 			$dateParts = explode(' ', $history['trade_date']);
 			
 			$pl[] = [
@@ -85,23 +87,24 @@ class TradesHistoryService
 	}
 	
 	/**
+	 * @var \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return int|mixed|string|null
 	 * @throws \Doctrine\ORM\NonUniqueResultException
 	 */
-	public function getStats()
+	public function getOverallStats(UserInterface $user)
 	{
-		return $this->historyRepository->getStats();
+		return $this->historyRepository->getOverallStats($user);
 	}
 	
 	/**
-	 * @param bool $separateByMonths
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function profitByHours(bool $separateByMonths = true): array
+	public function profitByHours(UserInterface $user): array
 	{
 		$stats = [];
 		
-		foreach ($this->historyRepository->statsByHours() as $profitByHour) {
+		foreach ($this->historyRepository->statsByHours($user) as $profitByHour) {
 			$stats[$profitByHour['month']][] = [
 				'time_start' => $profitByHour['time_start'],
 				'time_end' => $profitByHour['time_end'],
@@ -116,14 +119,14 @@ class TradesHistoryService
 	}
 	
 	/**
-	 * @param bool $separateByMonths
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function statsByDays(bool $separateByMonths = true): array
+	public function statsByDays(UserInterface $user): array
 	{
 		$stats = [];
 		
-		foreach ($this->historyRepository->statsByDays() as $byDay) {
+		foreach ($this->historyRepository->statsByDays($user) as $byDay) {
 			$stats[$byDay['month']][] = [
 				'trade_day' => $byDay['trade_day'],
 				'profit' => $byDay['profit'],
@@ -136,34 +139,34 @@ class TradesHistoryService
 	}
 	
 	/**
-	 * @param bool $separateByMonths
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function statsByMonths(bool $separateByMonths = true): array
+	public function statsByMonths(UserInterface $user): array
 	{
 		$stats = [];
 		
-		foreach ($this->historyRepository->statsByMonths() as $byMonth) {
+		/*foreach ($this->historyRepository->statsByMonths() as $byMonth) {
 			$stats[$byMonth['month']][] = [
 				'profit' => $byMonth['profit'],
 				'trade_counter' => $byMonth['trade_counter'],
 				'winners' => $byMonth['winners'],
 				'losers' => $byMonth['losers'],
 			];
-		}
+		}*/
 		
-		return $stats;
+		return $this->historyRepository->statsByMonths($user);
 	}
 	
 	/**
-	 * @param bool $separateByMonths
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return array
 	 */
-	public function statsByMarkets(bool $separateByMonths = true, array $fields = []): array
+	public function statsByMarkets(UserInterface $user): array
 	{
 		$stats = [];
 		
-		foreach ($this->historyRepository->statsByMarkets() as $byMarket) {
+		foreach ($this->historyRepository->statsByMarkets($user) as $byMarket) {
 			/*$stats[$byMarket['month']][] = [
 				'profit' => $byMarket['profit'],
 				'market' => $byMarket['market'],

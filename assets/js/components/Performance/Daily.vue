@@ -5,14 +5,14 @@
     <div class="col-12 lg:col-6">
       <div class="card" v-for="(month, key) in this.months" v-show="barData[key]">
         <h5>{{ month }}</h5>
-        <Chart :ref="`barChart`+(key)" type="bar" :data="barData[key]" :options="barOptions" />
+        <Chart :ref="`barChart`+(key)" type="bar" :data="barData[key]" :options="barOptions" v-if="barData[key]" />
       </div>
     </div>
 
     <div class="col-12 lg:col-6">
       <div class="card" v-for="(month, key) in this.months" v-show="stackedData[key]">
         <h5>{{ month }}</h5>
-        <Chart :ref="`stackedChart`+(key)" type="bar" :data="stackedData[key]" :options="stackedOptions" />
+        <Chart :ref="`stackedChart`+(key)" type="bar" :data="stackedData[key]" :options="stackedOptions" v-if="stackedData[key]" />
       </div>
     </div>
 
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "ByDays",
+  name: "PerformanceDaily",
   data() {
     return {
       months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -44,7 +44,7 @@ export default {
     getStats() {
       let self = this;
 
-      this.axios.get('/api/time-stats/by-days').then((response) => {
+      this.axios.get('/api/performance/daily').then((response) => {
         Object.keys(response.data).map((res) => {
           self.barData[res-1] = {
             labels: response.data[res].map(time => time.trade_day),
@@ -77,10 +77,37 @@ export default {
           };
         })
       })
+      .catch(function(error) {
+
+        if(error.response.status === 403) {
+
+          self.showMessage('error', 'Access denied', 'Your session was expired');
+
+          /*self.$toast.add({
+            severity: 'error',
+            summary: 'You are not authorized',
+            detail: JSON.parse(event.xhr.responseText).message,
+            life: 3000
+          });*/
+
+          window.location = '/login';
+          // self.$router.push({ name: 'dashboard' })
+        }
+
+      })
+    },
+
+    showMessage(type, summary, details, timeout = 3000) {
+      this.$toast.add({
+        severity:type,
+        summary: summary,
+        detail:details,
+        life: timeout});
     }
   },
   mounted() {
     this.getStats();
+    // this.$toast.add({severity:'success', summary: 'Success Message', detail:'Order submitted', life: 3000});
   }
 }
 </script>

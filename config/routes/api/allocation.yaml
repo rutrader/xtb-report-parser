@@ -1,0 +1,3 @@
+api_allocation_markets:
+  path: /allocations/markets
+  controller: App\Controller\Api\AllocationController::markets

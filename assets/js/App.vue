@@ -41,18 +41,18 @@ export default {
           }]
         },
         {
-          label: 'Time stats',
+          label: 'Performance',
           items: [
-            {label: 'By hours', icon: 'fa-thin fa-clock-five', to: '/time-stats/by-hours'},
-            {label: 'By days', icon: 'fa-thin fa-calendar-day', to: '/time-stats/by-days'},
-            {label: 'By Months', icon: 'fa-thin fa-chart-pie-simple', to: '/time-stats/by-months'}
+            {label: 'Monthly', icon: 'fa-thin fa-chart-pie-simple', to: '/performance/monthly'},
+            {label: 'Daily', icon: 'fa-thin fa-calendar-day', to: '/performance/daily'},
+            {label: 'Hourly', icon: 'fa-thin fa-clock-five', to: '/performance/hourly'},
             // {label: 'By days', icon: 'fa-thin fa-chart-mixed', to: '/time-stats/win-loss'}
           ]
         },
         {
           label: 'Allocation',
           items: [
-            {label: 'By market type', icon: 'fa-thin fa-boxes-stacked', to: '/stats/by-markets'}
+            {label: 'By market type', icon: 'fa-thin fa-boxes-stacked', to: '/allocation/markets'}
           ]
         }
         /*{

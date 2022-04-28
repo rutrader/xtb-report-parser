@@ -1,18 +1,3 @@
-
-api_profit_by_hours:
-  path: /net-profit/by-hours
-  controller: App\Controller\ApiStatsController::profitByHours
-
-
-api_profit_by_days:
-  path: /time-stats/by-days
-  controller: App\Controller\ApiStatsController::statsByDays
-
-api_stats_by_months:
-  path: /time-stats/by-months
-  controller: App\Controller\ApiStatsController::statsByMonths
-
-
-api_stats_by_markets:
-  path: /market-stats
-  controller: App\Controller\ApiStatsController::statsByMarkets
+api_stats_overall:
+  path: /stats/overall
+  controller: App\Controller\Api\StatsController::overall
