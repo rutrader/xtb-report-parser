@@ -42,6 +42,11 @@ const routes = [
 				path: '/import',
 				name: 'import',
 				component: () => import('./components/Import')
+			},
+			{
+				path: '/settings',
+				name: 'settings',
+				component: () => import('./components/Settings')
 			}
 		]
 	}

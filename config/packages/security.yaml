@@ -29,6 +29,13 @@ security:
             logout:
                 path: app_auth_logout
 
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
+                always_remember_me: true
+                signature_properties: ['password']
+#                signature_properties: ['password', 'updatedAt']
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 

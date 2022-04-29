@@ -54,6 +54,12 @@ export default {
           items: [
             {label: 'By market type', icon: 'fa-thin fa-boxes-stacked', to: '/allocation/markets'}
           ]
+        },
+        {
+          label: 'Settings',
+          items: [
+            {label: 'Settings', icon: 'fa-thin fa-cog', to: '/settings'}
+          ]
         }
         /*{
           label: 'Pages', icon: 'pi pi-fw pi-clone',
