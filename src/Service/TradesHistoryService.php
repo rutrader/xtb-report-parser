@@ -183,4 +183,14 @@ class TradesHistoryService
 		
 		return $stats;
 	}
+	
+	/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
+	 * @return int|mixed|string
+	 */
+	public function removeAllForUser(UserInterface $user)
+	{
+		return $this->historyRepository->removeAll($user);
+	}
+	
 }

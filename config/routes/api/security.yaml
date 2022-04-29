@@ -1,0 +1,4 @@
+api_security_check_auth:
+  path: /security/check
+  controller: App\Controller\Api\SecurityController::check
+

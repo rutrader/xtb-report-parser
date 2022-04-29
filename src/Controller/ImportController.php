@@ -48,11 +48,15 @@ class ImportController extends AbstractController
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		
-		$user = $this->getUser();
+		if(!$user = $this->getUser()) {
+			return $this->json([], Response::HTTP_FORBIDDEN);
+		}
 		
 		$imported = 0;
 		
 		if (($handle = fopen($request->files->get('report')->getPathname(), 'rb')) !== false) {
+			
+			$this->tradesHistoryService->removeAllForUser($user);
 			
 			$row = 0;
 			
@@ -78,7 +82,7 @@ class ImportController extends AbstractController
 						'netProfit' => (float)$data[9],
 						'comment' => $data[10],
 						'market' => $this->marketTypeService->getMarketBySymbol($data[0]),
-						'user' => $this->getUser(),
+						'user' => $user,
 						'importedAt' => $importedDate,
 					], false);
 					

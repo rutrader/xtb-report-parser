@@ -129,6 +129,9 @@ if (document.getElementById('app')) {
 	app.component('Chart', Chart);
 	app.component('FileUpload', FileUpload);
 	app.component('Toast', Toast)
+	app.component('Menu', Menu)
+	app.component('Button', Button)
+	app.component('Message', Message)
 	
 	app.component('DataTable', DataTable);
 	app.component('Column', Column)

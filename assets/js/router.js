@@ -38,6 +38,11 @@ const routes = [
 				name: 'allocation-by-markets',
 				component: () => import('./components/Allocation/Markets')
 			},
+			{
+				path: '/import',
+				name: 'import',
+				component: () => import('./components/Import')
+			}
 		]
 	}
 ]
