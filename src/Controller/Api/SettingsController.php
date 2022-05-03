@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use App\Service\TradesHistoryService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,15 +14,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class SettingsController extends AbstractController
 {
 	
+	/** @var \App\Service\TradesHistoryService */
+	private $tradesHistoryService;
+	
+	/**
+	 * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+	 * @param \App\Service\TradesHistoryService $tradesHistoryService
+	 */
+	public function __construct(EntityManagerInterface $entityManager, TradesHistoryService $tradesHistoryService)
+	{
+		$this->tradesHistoryService = $tradesHistoryService;
+	}
+	
 	/**
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function clearHistory(): Response
 	{
-		return $this->json([
-			'message' => 'Welcome to your new controller!',
-			'path' => 'src/Controller/Api/SettingsController.php',
-		]);
+		if(!$user = $this->getUser()) {
+			return $this->json([], Response::HTTP_FORBIDDEN);
+		}
+		
+		return $this->json(['message' => $this->tradesHistoryService->removeAllForUser($user)]);
 	}
 	
 }

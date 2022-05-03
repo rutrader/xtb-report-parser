@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="hasStats">
+    <div v-if="true">
       <div class="grid p-fluid">
 
         <!--        Overall stats-->
