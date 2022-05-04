@@ -2,17 +2,24 @@
   <div class="grid p-fluid">
     <Toast />
 
-    <div class="col-12 lg:col-6">
+    <div class="col-12 lg:col-4">
       <div class="card" v-for="(month, key) in this.months" v-show="barData[key]">
         <h5>{{ month }}</h5>
         <Chart :ref="`barChart`+(key)" type="bar" :data="barData[key]" :options="barOptions" v-if="barData[key]" />
       </div>
     </div>
 
-    <div class="col-12 lg:col-6">
+    <div class="col-12 lg:col-4">
       <div class="card" v-for="(month, key) in this.months" v-show="stackedData[key]">
         <h5>{{ month }}</h5>
         <Chart :ref="`stackedChart`+(key)" type="bar" :data="stackedData[key]" :options="stackedOptions" v-if="stackedData[key]" />
+      </div>
+    </div>
+
+    <div class="col-12 lg:col-4">
+      <div class="card" v-for="(month, key) in this.months" v-show="counterData[key]">
+        <h5>{{ month }}</h5>
+        <Chart type="bar" :data="counterData[key]" v-if="counterData[key]" />
       </div>
     </div>
 
@@ -38,6 +45,7 @@ export default {
           }
         }
       },
+      counterData: [],
     }
   },
   methods: {
@@ -75,25 +83,38 @@ export default {
               }
             ]
           };
+
+          self.counterData[res-1] = {
+            labels: response.data[res].map(time => time.trade_day),
+            datasets: [
+              {
+                label: 'Trade counts in ' + self.months[res-1],
+                backgroundColor: '#409fdc',
+                data: response.data[res].map(profit => profit.trade_counter)
+              }
+            ]
+          }
         })
       })
       .catch(function(error) {
+        if(error.response) {
+          if (error.response.status === 403) {
 
-        if(error.response.status === 403) {
+            self.showMessage('error', 'Access denied', 'Your session was expired');
 
-          self.showMessage('error', 'Access denied', 'Your session was expired');
+            /*self.$toast.add({
+              severity: 'error',
+              summary: 'You are not authorized',
+              detail: JSON.parse(event.xhr.responseText).message,
+              life: 3000
+            });*/
 
-          /*self.$toast.add({
-            severity: 'error',
-            summary: 'You are not authorized',
-            detail: JSON.parse(event.xhr.responseText).message,
-            life: 3000
-          });*/
-
-          window.location = '/login';
-          // self.$router.push({ name: 'dashboard' })
+            window.location = '/login';
+            // self.$router.push({ name: 'dashboard' })
+          }
+        } else {
+          console.error(error.message)
         }
-
       })
     },
 
