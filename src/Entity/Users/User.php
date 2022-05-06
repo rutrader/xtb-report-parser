@@ -2,6 +2,10 @@
 
 namespace App\Entity\Users;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 use App\Entity\Trades\History;
 use App\Repository\Users\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,8 +14,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
+ *     normalizationContext={"groups"={"user:read"}}
+ * )
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(name="`user`")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
@@ -20,6 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	
 	/**
+	 * @Groups({"history:read"})
 	 * @var \Ramsey\Uuid\UuidInterface
 	 *
 	 * @ORM\Id
@@ -30,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private $id;
 	
 	/**
+	 * @Groups({"user:read", "history:item:get", "history:read"})
 	 * @ORM\Column(type="string", length=180, unique=true)
 	 * @var string
 	 */
@@ -54,6 +67,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private $isVerified = false;
 	
 	/**
+	 * @Groups({"user:read"})
+	 * @ ApiSubresource()
 	 * @ORM\OneToMany(targetEntity=History::class, mappedBy="trader")
 	 * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Trades\History[]
 	 */

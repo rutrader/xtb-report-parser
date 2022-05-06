@@ -2,6 +2,7 @@
 
 namespace App\Entity\Types;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trades\History;
 use App\Repository\Types\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,6 +12,10 @@ use Hidehalo\Nanoid;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
+ * @ApiResource(
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"}
+ * )
  * @ORM\Entity(repositoryClass=OrderRepository::class)
  * @ORM\Table(name="`type_order`")
  */

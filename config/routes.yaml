@@ -6,10 +6,10 @@ app_import:
   path: /import
   controller: App\Controller\ImportController::index
 
-api_routes:
-  resource: './routes/api/'
-  prefix: '/api'
-  type: directory
+#api_routes:
+#  resource: './routes/api/'
+#  prefix: '/api'
+#  type: directory
 
 app_auth_routes:
   resource: './routes/auth/'

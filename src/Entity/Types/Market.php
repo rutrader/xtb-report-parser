@@ -2,6 +2,7 @@
 
 namespace App\Entity\Types;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Entity\Trades\History;
 use App\Repository\Types\MarketRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,6 +12,10 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 use Hidehalo\Nanoid;
 
 /**
+ * @ApiResource(
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
+ * )
  * @ORM\Entity(repositoryClass=MarketRepository::class)
  * @ORM\Table(name="`type_market`")
  */
