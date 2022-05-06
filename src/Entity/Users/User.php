@@ -20,7 +20,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *     itemOperations={"get"},
  *     collectionOperations={"get"},
- *     normalizationContext={"groups"={"user:read"}}
+ *     normalizationContext={"groups"={"user:read"}},
+ *     forceEager=false
  * )
  * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -67,8 +68,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private $isVerified = false;
 	
 	/**
-	 * @Groups({"user:read"})
-	 * @ ApiSubresource()
+	 * @Groups({"user:read", "history:read", "history:item:get"})
+	 * @ApiSubresource()
 	 * @ORM\OneToMany(targetEntity=History::class, mappedBy="trader")
 	 * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Trades\History[]
 	 */

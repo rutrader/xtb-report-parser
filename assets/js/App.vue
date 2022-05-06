@@ -1,34 +1,40 @@
 <template>
-  <div :class="containerClass" @click="onWrapperClick">
-    <div class="layout-main-container">
+    <div :class="containerClass" @click="onWrapperClick" v-if="user">
+      <div class="layout-main-container">
 
-      <AppTopBar @menu-toggle="onMenuToggle" />
+        <AppTopBar @menu-toggle="onMenuToggle" />
 
-      <div class="layout-sidebar" @click="onSidebarClick">
-        <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+        <div class="layout-sidebar" @click="onSidebarClick">
+          <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
+        </div>
+
+        <div class="layout-main">
+          <router-view />
+        </div>
+        <!--      <AppFooter />-->
       </div>
-
-      <div class="layout-main">
-        <router-view />
-      </div>
-      <!--      <AppFooter />-->
     </div>
-  </div>
+    <div v-else>
+      <Login v-on:user-authenticated="onUserAuthenticated" />
+    </div>
 </template>
 
 <script>
 
 import AppTopBar from "./AppTopBar";
 import AppMenu from "./AppMenu";
+import Login from './components/Login'
 
 export default {
   name: "App",
   components: {
     'AppTopBar': AppTopBar,
-    'AppMenu': AppMenu
+    'AppMenu': AppMenu,
+    'Login': Login,
   },
   data() {
     return {
+      user: null,
       layoutMode: 'static', //overlay
       staticMenuInactive: false,
       overlayMenuActive: false,
@@ -68,6 +74,11 @@ export default {
           ]
         },*/
       ]
+    }
+  },
+  mounted() {
+    if(window.user) {
+      this.user = window.user;
     }
   },
   methods: {
@@ -135,6 +146,11 @@ export default {
       }
 
       return true;
+    },
+    onUserAuthenticated(userUri) {
+      this.axios
+          .get(userUri)
+          .then(response => (this.user = response.data))
     }
   },
   computed: {
