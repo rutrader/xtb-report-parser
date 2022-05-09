@@ -18,9 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *     "get"={
  *              "normalization_context"={"groups"={"history:read", "history:item:get"}},
+ *              "security"="is_granted('ROLE_USER')"
  *          },
  *     },
- *     collectionOperations={"get"},
+ *     collectionOperations={"get" = {
+ *              "security"="is_granted('ROLE_USER')"
+ *     }},
  *     normalizationContext={"groups"={"history:read"}}
  * )
  * @ApiFilter(PropertyFilter::class)
