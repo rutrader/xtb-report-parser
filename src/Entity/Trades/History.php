@@ -18,11 +18,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *     "get"={
  *              "normalization_context"={"groups"={"history:read", "history:item:get"}},
- *              "security"="is_granted('ROLE_USER')"
+ *              "security"="is_granted('IS_AUTHENTICATED_FULLY')",
  *          },
  *     },
  *     collectionOperations={"get" = {
- *              "security"="is_granted('ROLE_USER')"
+ *              "security"="is_granted('IS_AUTHENTICATED_FULLY')"
  *     }},
  *     normalizationContext={"groups"={"history:read"}}
  * )
@@ -117,7 +117,7 @@ class History
 	private $marketType;
 	
 	/**
-	 * @Groups({"history:read", "user:read"})
+	 * @Groups({"history:read"})
 	 * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trades")
 	 * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
 	 */

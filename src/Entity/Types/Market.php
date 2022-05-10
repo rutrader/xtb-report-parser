@@ -13,12 +13,8 @@ use Hidehalo\Nanoid;
 
 /**
  * @ApiResource(
- *     itemOperations={"get"={
- *              "security"="is_granted('ROLE_USER')"
- *     }},
- *     collectionOperations={"get"={
- *              "security"="is_granted('ROLE_USER')"
- *     }},
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=MarketRepository::class)
  * @ORM\Table(name="`type_market`")

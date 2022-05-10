@@ -13,12 +13,8 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @ApiResource(
- *     itemOperations={"get"={
- *              "security"="is_granted('ROLE_USER')"
- *     }},
- *     collectionOperations={"get"={
- *              "security"="is_granted('ROLE_USER')"
- *     }},
+ *     itemOperations={"get"},
+ *     collectionOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=OrderRepository::class)
  * @ORM\Table(name="`type_order`")

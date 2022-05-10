@@ -18,9 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     "security"="is_granted('ROLE_ADMIN')"
- *     itemOperations={"get"},
- *     collectionOperations={"get"},
+ *     itemOperations={"get" = {
+ *              "security"="is_granted('IS_AUTHENTICATED_FULLY')"
+ *     }},
+ *     collectionOperations={"get" = {
+ *              "security"="is_granted('IS_AUTHENTICATED_FULLY')"
+ *     }},
  *     normalizationContext={"groups"={"user:read"}},
  *     forceEager=false
  * )
@@ -33,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 	
 	/**
-	 * @Groups({"history:read"})
+	 * @Groups({"user:read"})
 	 * @var \Ramsey\Uuid\UuidInterface
 	 *
 	 * @ORM\Id
@@ -44,7 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private $id;
 	
 	/**
-	 * @Groups({"user:read", "history:item:get", "history:read"})
+	 * @Groups({"user:read"})
 	 * @ORM\Column(type="string", length=180, unique=true)
 	 * @var string
 	 */
@@ -69,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 	private $isVerified = false;
 	
 	/**
-	 * @Groups({"user:read", "history:read", "history:item:get"})
+	 * @Groups({"user:read", "history:item:get"})
 	 * @ApiSubresource()
 	 * @ORM\OneToMany(targetEntity=History::class, mappedBy="trader")
 	 * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Trades\History[]
