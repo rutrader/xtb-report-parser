@@ -3,20 +3,20 @@
 
     <Toast />
 
-    <div class="col-12 lg:col-4">
+    <div class="col-12 col-lg-4">
       <div class="card" v-for="(month, key) in this.months" v-show="barData[key]">
         <h5>{{ month }}</h5>
         <Chart :ref="`barChart`+(key)" type="bar" :data="barData[key]" :options="barOptions" />
       </div>
     </div>
-    <div class="col-12 lg:col-4">
+    <div class="col-12 col-lg-4">
       <div class="card" v-for="(month, key) in this.months" v-show="stackedData[key]">
         <h5>{{ month }}</h5>
         <Chart :ref="`stackedChart`+(key)" type="bar" :data="stackedData[key]" :options="stackedOptions" />
       </div>
     </div>
 
-    <div class="col-12 lg:col-4">
+    <div class="col-12 col-lg-4">
       <div class="card" v-for="(month, key) in this.months" v-show="counterData[key]">
         <h5>{{ month }}</h5>
         <Chart type="bar" :data="counterData[key]" />

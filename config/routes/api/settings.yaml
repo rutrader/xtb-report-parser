@@ -1,3 +1,3 @@
 api_settings_clear_history:
   path: /settings/clear-history
-  controller: App\Controller\Api\SettingsController::clearHistory
+  controller: App\Controller\Api\Settings\ClearHistoryController::clearHistory

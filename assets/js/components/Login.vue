@@ -25,7 +25,7 @@
                 <input type="password" id="password" name="password" class="form-control" v-model="password" />
               </div>
 
-              <button class="w-100 btn btn-lg btn-primary" type="button" v-on:click="doLogin">Sign in</button>
+              <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
 
             </form>
           </div>

@@ -2,19 +2,23 @@ app_index:
   path: /
   controller: App\Controller\DefaultController::index
 
-app_import:
-  path: /import
-  controller: App\Controller\ImportController::index
+#app_import:
+#  path: /import
+#  controller: App\Controller\ImportController::index
 
-#api_routes:
-#  resource: './routes/api/'
-#  prefix: '/api'
-#  type: directory
-
-app_auth_routes:
-  resource: './routes/auth/'
-  prefix: '/auth'
+api_routes:
+  resource: './routes/api/'
+  prefix: '/api'
   type: directory
+
+app_json_login:
+  path: /json/login
+  controller: App\Controller\Api\LoginController::index
+
+#app_auth_routes:
+#  resource: './routes/auth/'
+#  prefix: '/auth'
+#  type: directory
 
 app_vue_index:
   path: /{route}

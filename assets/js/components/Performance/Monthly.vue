@@ -3,14 +3,14 @@
   <div class="grid p-fluid">
     <Toast />
 
-    <div class="col-12 lg:col-6">
+    <div class="col-12 col-lg-6">
       <div class="card">
         <h5>Bar Chart</h5>
         <Chart ref="barChart" type="bar" :data="performanceData" :options="barOptions" />
       </div>
     </div>
 
-    <div class="col-12 lg:col-6">
+    <div class="col-12 col-lg-6">
       <div class="card">
         <h5>Winner/Losers</h5>
         <Chart type="bar" :data="winnerLosersData" :options="stackedOptions" />

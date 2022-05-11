@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Performance;
 
 use App\Service\TradesHistoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
  */
-class StatsController extends AbstractController
+class OverallController extends AbstractController
 {
 	
 	/** @var \App\Service\TradesHistoryService */
@@ -24,14 +25,17 @@ class StatsController extends AbstractController
 	{
 		$this->tradesHistoryService = $tradesHistoryService;
 	}
-
-    /**
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-	public function __invoke(): JsonResponse
-    {
-        return $this->json($this->tradesHistoryService->getOverallStats($this->getUser()));
-    }
+	
+	/**
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function __invoke(): Response
+	{
+		if(!$user = $this->getUser()) {
+			return $this->json([], Response::HTTP_FORBIDDEN);
+		}
+		
+		return $this->json($this->tradesHistoryService->getTradesResults($user, TradesHistoryService::BY_DAY));
+	}
 
 }

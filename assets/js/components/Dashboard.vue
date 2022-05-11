@@ -4,7 +4,7 @@
       <div class="grid p-fluid">
 
         <!--        Overall stats-->
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 col-lg-3">
           <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -29,7 +29,7 @@
         </div>
 
         <!--        Buy orders-->
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 col-lg-3">
           <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -54,7 +54,7 @@
         </div>
 
         <!--        Sell orders-->
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 col-lg-3">
           <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -79,7 +79,7 @@
         </div>
 
         <!--        Gross P/L-->
-        <div class="col-12 lg:col-6 xl:col-3">
+        <div class="col-12 col-lg-3">
           <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
               <div>
@@ -104,14 +104,14 @@
         </div>
 
 
-        <div class="col-12 xl:col-6">
+        <div class="col-12 col-lg-6">
           <div class="card">
             <h5>Overall trades performance</h5>
-            <Chart ref="lineChart" type="line" :data="getPerformanceOverall()" :options="lineOptions" />
+            <Chart type="line" :data="lineData" :options="lineOptions" />
           </div>
         </div>
 
-        <div class="col-12 xl:col-6">
+        <div class="col-12 col-lg-6">
 
           <div class="card flex flex-column align-items-center">
             <h5 class="align-self-start">Profit to Loss</h5>
@@ -154,11 +154,8 @@ export default {
     getOverallStats() {
       let self = this;
 
-      this.axios.get('/api/stats/overall').then((response) => {
-
+      this.axios.get('/api/stats').then((response) => {
         self.stats = response.data;
-
-        // self.$refs.pieChart.data.datasets[0].data = [self.stats.profit_orders / self.stats.total_orders * 100, self.stats.loss_orders / self.stats.total_orders * 100];
       })
     },
 
@@ -207,6 +204,7 @@ export default {
 
   mounted() {
     this.getOverallStats();
+    this.getPerformanceOverall();
   },
 
   data() {

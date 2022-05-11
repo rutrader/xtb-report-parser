@@ -1,16 +1,16 @@
 api_performance_overall:
   path: /performance/overall
-  controller: App\Controller\Api\PerformanceController::overall
+  controller: App\Controller\Api\Performance\OverallController::__invoke
 
 api_performance_monthly:
   path: /performance/monthly
-  controller: App\Controller\Api\PerformanceController::monthly
+  controller: App\Controller\Api\Performance\MonthlyController::__invoke
 
 api_performance_daily:
   path: /performance/daily
-  controller: App\Controller\Api\PerformanceController::daily
+  controller: App\Controller\Api\Performance\DailyController::__invoke
 
 api_profit_by_hours:
   path: /performance/hourly
-  controller: App\Controller\Api\PerformanceController::hourly
+  controller: App\Controller\Api\Performance\HourlyController::__invoke
 

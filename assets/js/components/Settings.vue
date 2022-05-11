@@ -66,7 +66,7 @@ export default {
     getOverallStats() {
       let self = this;
 
-      this.axios.get('/api/stats/overall').then((response) => {
+      this.axios.get('/api/stats').then((response) => {
         self.stats = response.data;
       })
     },

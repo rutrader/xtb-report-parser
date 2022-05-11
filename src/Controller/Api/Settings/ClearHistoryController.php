@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Settings;
 
 use App\Service\TradesHistoryService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
  */
-class SettingsController extends AbstractController
+class ClearHistoryController extends AbstractController
 {
 	
 	/** @var \App\Service\TradesHistoryService */

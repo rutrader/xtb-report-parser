@@ -83,7 +83,7 @@ export default {
     }
   },
   mounted() {
-    this.checkAuth();
+    // this.checkAuth();
   },
   methods: {
     onMenuToggle(event) {

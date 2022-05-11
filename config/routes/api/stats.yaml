@@ -1,3 +1,3 @@
 api_stats_overall:
-  path: /stats/overall
-  controller: App\Controller\Api\StatsController::overall
+  path: /stats
+  controller: App\Controller\Api\StatsController::__invoke

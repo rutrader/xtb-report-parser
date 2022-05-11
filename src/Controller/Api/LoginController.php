@@ -14,7 +14,7 @@ class LoginController extends AbstractController
 {
 	
 	/**
-	 * @Route("/json/login", name="app_json_login")
+	 * @Route("/login", name="")
 	 */
 	public function index(IriConverterInterface $iriConverter): Response
 	{
@@ -30,7 +30,7 @@ class LoginController extends AbstractController
 	}
 	
 	/**
-	 * @Route("/json/logout", name="app_json_logout")
+	 * @Route("/logout", name="app_json_logout")
 	 * @throws \Exception
 	 */
 	public function logout()

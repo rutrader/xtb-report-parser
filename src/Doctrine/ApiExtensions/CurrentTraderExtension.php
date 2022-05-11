@@ -16,7 +16,7 @@ final class CurrentTraderExtension implements QueryCollectionExtensionInterface,
 {
 
     /** @var \Symfony\Component\Security\Core\Security */
-    private $security;
+    private Security $security;
 
     /**
      * CurrentTraderExtension constructor.
