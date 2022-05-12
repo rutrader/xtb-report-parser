@@ -54,8 +54,10 @@ export default {
       this.axios.get('/api/settings/clear-history')
           .then(function (response) {
             self.showMessage('error', 'Success', 'Your history (' + response.data.message +') was erased')
+            self.getOverallStats()
           })
     },
+
     showMessage(type, summary, details, timeout = 3000) {
       this.$toast.add({
         severity:type,

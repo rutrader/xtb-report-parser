@@ -15,7 +15,7 @@ class ClearHistoryController extends AbstractController
 {
 	
 	/** @var \App\Service\TradesHistoryService */
-	private $tradesHistoryService;
+	private TradesHistoryService $tradesHistoryService;
 	
 	/**
 	 * @param \Doctrine\ORM\EntityManagerInterface $entityManager

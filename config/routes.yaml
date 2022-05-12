@@ -2,9 +2,10 @@ app_index:
   path: /
   controller: App\Controller\DefaultController::index
 
-#app_import:
-#  path: /import
-#  controller: App\Controller\ImportController::index
+app_import:
+  path: /import
+  controller: App\Controller\ImportController::index
+  methods: 'POST'
 
 api_routes:
   resource: './routes/api/'

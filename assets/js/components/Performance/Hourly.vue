@@ -1,5 +1,5 @@
 <template>
-  <div class="grid p-fluid">
+  <div class="grid p-fluid" v-if="!showLoader">
 
     <Toast />
 
@@ -24,14 +24,21 @@
     </div>
 
   </div>
+  <div v-else>
+    <Skeleton shape="rectangle" height="8rem" />
+  </div>
+
 </template>
 
 <script>
+import * as Utils from "../../Utils";
+
 export default {
   name: "PerformanceHourly",
   data() {
     return {
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      showLoader: true,
+      months: Utils.months({count: 12}),
       counterData: [],
       barData: [],
       stackedData: [],
@@ -97,6 +104,8 @@ export default {
           };
 
         })
+
+        self.showLoader = false;
       })
     }
   },

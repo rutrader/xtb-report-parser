@@ -5,7 +5,7 @@
 
         <!--        Overall stats-->
         <div class="col-12 col-lg-3">
-          <div class="card mb-0">
+          <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
                 <span class="block text-500 font-medium mb-3">Trades</span>
@@ -26,11 +26,14 @@
             <!--        <span class="text-green-500 font-medium">24 new </span>-->
             <!--        <span class="text-500">since last visit</span>-->
           </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
+          </div>
         </div>
 
         <!--        Buy orders-->
         <div class="col-12 col-lg-3">
-          <div class="card mb-0">
+          <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
                 <span class="block text-500 font-medium mb-3">Buy orders</span>
@@ -51,11 +54,14 @@
             <!--        <span class="text-green-500 font-medium">%52+ </span>-->
             <!--        <span class="text-500">since last week</span>-->
           </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
+          </div>
         </div>
 
         <!--        Sell orders-->
         <div class="col-12 col-lg-3">
-          <div class="card mb-0">
+          <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
                 <span class="block text-500 font-medium mb-3">Sell orders</span>
@@ -76,11 +82,14 @@
             <!--        <span class="text-green-500 font-medium">520  </span>-->
             <!--        <span class="text-500">newly registered</span>-->
           </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
+          </div>
         </div>
 
         <!--        Gross P/L-->
         <div class="col-12 col-lg-3">
-          <div class="card mb-0">
+          <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
                 <span class="block text-500 font-medium mb-3">Gross P/L</span>
@@ -101,21 +110,30 @@
             <!--        <span class="text-green-500 font-medium">85 </span>-->
             <!--        <span class="text-500">responded</span>-->
           </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
+          </div>
         </div>
 
 
         <div class="col-12 col-lg-6">
-          <div class="card">
+          <div class="card" v-if="hasStats">
             <h5>Overall trades performance</h5>
             <Chart type="line" :data="lineData" :options="lineOptions" />
+          </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
           </div>
         </div>
 
         <div class="col-12 col-lg-6">
 
-          <div class="card flex flex-column align-items-center">
+          <div class="card flex flex-column align-items-center" v-if="hasStats">
             <h5 class="align-self-start">Profit to Loss</h5>
             <Chart ref="pieChart" type="pie" :data="getAccuracy()" :options="pieOptions" style="width: 50%" />
+          </div>
+          <div v-else>
+            <Skeleton shape="rectangle" height="8rem" />
           </div>
         </div>
 
@@ -147,6 +165,8 @@
 </template>
 
 <script>
+import * as Utils from "../Utils";
+
 export default {
   name: "Dashboard",
   methods: {
@@ -215,7 +235,7 @@ export default {
       profits: 0,
       loses: 0,
       total: 0,
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      months: Utils.months({count: 12}),
       lineData: {
         labels: [],
         datasets: [

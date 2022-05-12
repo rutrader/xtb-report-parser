@@ -37,24 +37,22 @@ export default {
   },
   methods: {
     onFileUploadError(event) {
-      this.$toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: JSON.parse(event.xhr.responseText).message,
-        life: 3000
-      });
-
+      this.showMessage('error', 'Error', JSON.parse(event.xhr.responseText).message, 3000);
     },
 
     onUpload(event) {
-      this.$toast.add({
-        severity: 'info',
-        summary: 'Success',
-        detail: JSON.parse(event.xhr.responseText).message,
-        life: 3000
-      });
+      this.showMessage('info', 'Success', JSON.parse(event.xhr.responseText).message, 3000);
+
+      this.$router.push('/')
     },
 
+    showMessage(type, summary, details, timeout = 3000) {
+      this.$toast.add({
+        severity:type,
+        summary: summary,
+        detail:details,
+        life: timeout});
+    }
   }
 }
 </script>

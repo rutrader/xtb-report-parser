@@ -1,23 +1,29 @@
 <template>
-  <div class="grid p-fluid">
+  <div class="grid p-fluid" v-if="!showLoader">
     <Toast />
 
-    <div class="col-12 lg:col-12">
+    <div class="col-12">
       <div class="card">
         <!--        <h5>Market types</h5>-->
         <Chart type="bar" :data="barData" :options="barOptions" />
       </div>
     </div>
   </div>
+  <div v-else>
+    <Skeleton shape="rectangle" height="8rem" />
+  </div>
 
 </template>
 
 <script>
+import * as Utils from "../../Utils";
+
 export default {
   name: "Markets",
   data() {
     return {
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      showLoader: true,
+      months: Utils.months({count: 12}),
       barData: {
         labels: [],
         datasets: [],
@@ -90,6 +96,8 @@ export default {
           })
 
         })
+
+        self.showLoader = false;
       });
     }
   },

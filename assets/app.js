@@ -14,7 +14,7 @@ import Badge from 'primevue/badge';
 import BadgeDirective from 'primevue/badgedirective';
 import Button from 'primevue/button';
 import Chart from 'primevue/chart';
-import Column from 'primevue/column';
+// import Column from 'primevue/column';
 // import DataTable from 'primevue/datatable';
 import FileUpload from 'primevue/fileupload';
 import Menu from 'primevue/menu';
@@ -24,6 +24,7 @@ import StyleClass from 'primevue/styleclass';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
+import Skeleton from 'primevue/skeleton';
 // import AutoComplete from 'primevue/autocomplete';
 // import Accordion from 'primevue/accordion';
 // import AccordionTab from 'primevue/accordiontab';
@@ -76,7 +77,6 @@ import Tooltip from 'primevue/tooltip';
 // import ScrollTop from 'primevue/scrolltop';
 // import Slider from 'primevue/slider';
 // import Sidebar from 'primevue/sidebar';
-// import Skeleton from 'primevue/skeleton';
 // import SplitButton from 'primevue/splitbutton';
 // import Splitter from 'primevue/splitter';
 // import SplitterPanel from 'primevue/splitterpanel';
@@ -136,7 +136,8 @@ if (document.getElementById('app')) {
 	app.component('Message', Message)
 	
 	// app.component('DataTable', DataTable);
-	app.component('Column', Column)
+	// app.component('Column', Column)
+	app.component('Skeleton', Skeleton)
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
 	app.mount('#app')

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="grid p-fluid">
+  <div class="grid p-fluid" v-if="!showLoader">
     <Toast />
 
     <div class="col-12 col-lg-6">
@@ -17,15 +17,21 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <Skeleton shape="rectangle" height="8rem" />
+  </div>
 
 </template>
 
 <script>
+import * as Utils from '../../Utils'
+
 export default {
   name: "PerformanceMonthly",
   data() {
     return {
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      showLoader: true,
+      months: Utils.months({count: 12}),
       pieData: [],
       pieOptions: {
         plugins: {
@@ -106,6 +112,8 @@ export default {
         })
 
         self.getWinnerLosersData();
+
+        self.showLoader = false;
       })
 
       return self.performanceData;

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid p-fluid">
+  <div class="grid p-fluid" v-if="!showLoader">
     <Toast />
 
     <div class="col-12 col-lg-4">
@@ -24,14 +24,20 @@
     </div>
 
   </div>
+  <div v-else>
+    <Skeleton shape="rectangle" height="8rem" />
+  </div>
 </template>
 
 <script>
+import * as Utils from "../../Utils";
+
 export default {
   name: "PerformanceDaily",
   data() {
     return {
-      months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+      showLoader: true,
+      months: Utils.months({count: 12}),
       barData: [],
       barOptions: null,
       stackedData: [],
@@ -95,10 +101,12 @@ export default {
             ]
           }
         })
+
+        self.showLoader = false;
       })
       .catch(function(error) {
         if(error.response) {
-          if (error.response.status === 403) {
+          if (error.response.status === 403 || error.response.status === 401 ) {
 
             self.showMessage('error', 'Access denied', 'Your session was expired');
 
