@@ -19,7 +19,17 @@
     <div class="col-12 col-lg-4">
       <div class="card" v-for="(month, key) in this.months" v-show="counterData[key]">
         <h5>{{ month }}</h5>
-        <Chart type="bar" :data="counterData[key]" />
+        <Chart
+            type="bar"
+            :data="counterData[key]"
+            :options="{plugins: {
+              legend: false,
+              title: {
+                text: this.$t('trades-counts'),
+                display: true,
+              }
+            }}"
+        />
       </div>
     </div>
 
@@ -42,7 +52,15 @@ export default {
       counterData: [],
       barData: [],
       stackedData: [],
-      barOptions: null,
+      barOptions: {
+        plugins: {
+          legend: false,
+          title: {
+            text: this.$t('performance.in-currency', {currency: 'CZK'}),
+            display: true,
+          }
+        }
+      },
       stackedOptions: {
         scales: {
           x: {
@@ -50,6 +68,13 @@ export default {
           },
           y: {
             stacked: true,
+          },
+        },
+        plugins: {
+          legend: false,
+          title: {
+            text: this.$t('winners-losers', {currency: 'CZK'}),
+            display: true,
           }
         }
       },

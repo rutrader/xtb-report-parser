@@ -5,14 +5,14 @@
 
     <div class="col-12 col-lg-6">
       <div class="card">
-        <h5>Bar Chart</h5>
+        <h5>{{ $t('performance.by-month') }}</h5>
         <Chart ref="barChart" type="bar" :data="performanceData" :options="barOptions" />
       </div>
     </div>
 
     <div class="col-12 col-lg-6">
       <div class="card">
-        <h5>Winner/Losers</h5>
+        <h5>{{ $t('winners-losers') }}</h5>
         <Chart type="bar" :data="winnerLosersData" :options="stackedOptions" />
       </div>
     </div>
@@ -28,6 +28,15 @@ import * as Utils from '../../Utils'
 
 export default {
   name: "PerformanceMonthly",
+  mounted() {
+    this.performanceData.datasets[0].data = new Array(this.months.length).fill(0)
+    this.performanceData.labels = this.winnerLosersData.labels = this.months;
+    this.winners = new Array(this.months.length).fill(0);
+    this.losers = new Array(this.months.length).fill(0)
+
+    this.getMonthlyData();
+    // this.performanceData.datasets[0].label = this.$t('performance.by-month');
+  },
   data() {
     return {
       showLoader: true,
@@ -46,19 +55,26 @@ export default {
         labels: [],
         datasets: [
           {
-            label: 'Performance by month',
+            label: '',
             backgroundColor: [],
             data: []
           },
         ]
       },
-      barOptions: null,
+      barOptions: {
+        plugins: {
+          legend: false,
+        },
+      },
       winnerLosersData: {
         labels: [],
         datasets: [],
       },
 
       stackedOptions: {
+        plugins: {
+          legend: false,
+        },
         scales: {
           x: {
             stacked: true,
@@ -105,7 +121,7 @@ export default {
         response.data.map(res => {
           let profit = parseFloat(res.profit).toFixed(2);
           self.performanceData.datasets[0].data[parseInt(res.month) - 1] = profit;
-          self.performanceData.datasets[0].backgroundColor.push(profit >= 0 ? '#12b000' : '#f20033')
+          self.performanceData.datasets[0].backgroundColor[parseInt(res.month)-1] = profit >= 0 ? '#12b000' : '#f20033';
 
           self.winners[parseInt(res.month) - 1] = res.winners;
           self.losers[parseInt(res.month) - 1] = res.losers;
@@ -137,14 +153,6 @@ export default {
 
       return self.winnerLosersData;
     }
-  },
-  mounted() {
-    this.performanceData.datasets[0].data = new Array(this.months.length).fill(0)
-    this.performanceData.labels = this.winnerLosersData.labels = this.months;
-    this.winners = new Array(this.months.length).fill(0);
-    this.losers = new Array(this.months.length).fill(0)
-
-    this.getMonthlyData();
   }
 }
 </script>

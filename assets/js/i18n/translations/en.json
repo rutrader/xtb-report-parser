@@ -38,5 +38,20 @@
       "sub-title": "Import/Re-upload your trading report",
       "import-button": "Import"
     }
-  }
+  },
+  "trades": "Trades",
+  "buy-orders": "Buy orders",
+  "sell-orders": "Sell orders",
+  "gross-profit-loss": "P/L (гросс)",
+  "net-profit": "Net profit",
+  "performance": {
+    "overall-trades": "Overall performance",
+    "by-month": "Performance by months",
+    "by-day": "Performance by days",
+    "by-hour": "Performance by hours"
+  },
+  "profit-to-loss": "Profit/Loss (%)",
+  "profitable-trades": "Profits",
+  "loss-trades": "Loses",
+  "winners-losers": "Winners/losers"
 }

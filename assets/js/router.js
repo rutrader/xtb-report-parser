@@ -80,7 +80,6 @@ export function setUpRouter(i18n) {
 		// load locale messages
 		if (!i18n.global.availableLocales.includes(paramsLocale)) {
 			await loadLocaleMessages(i18n, paramsLocale)
-			console.info('router');
 		}
 
 		// set i18n language

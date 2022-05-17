@@ -19,7 +19,18 @@
     <div class="col-12 col-lg-4">
       <div class="card" v-for="(month, key) in this.months" v-show="counterData[key]">
         <h5>{{ month }}</h5>
-        <Chart type="bar" :data="counterData[key]" v-if="counterData[key]" />
+        <Chart
+            type="bar"
+            :data="counterData[key]"
+            v-if="counterData[key]"
+            :options="{plugins: {
+              legend: false,
+              title: {
+                text: this.$t('trades-counts'),
+                display: true,
+              }
+            }}"
+        />
       </div>
     </div>
 
@@ -39,9 +50,24 @@ export default {
       showLoader: true,
       months: Utils.months({count: 12}),
       barData: [],
-      barOptions: null,
+      barOptions: {
+        plugins: {
+          legend: false,
+          title: {
+            text: this.$t('performance.in-currency', {currency: 'CZK'}),
+            display: true,
+          }
+        }
+      },
       stackedData: [],
       stackedOptions: {
+        plugins: {
+          legend: false,
+          title: {
+            text: this.$t('winners-losers'),
+            display: true,
+          }
+        },
         scales: {
           x: {
             stacked: true,
@@ -64,7 +90,7 @@ export default {
             labels: response.data[res].map(time => time.trade_day),
             datasets: [
               {
-                label: 'Performance by ' + self.months[res-1] + ' in CZK',
+                label: self.$t('performance.by-month-in-currency', {month: self.months[res-1], currency: 'CZK'}),
                 backgroundColor: response.data[res].map(profit => profit.profit >= 0 ? '#12b000' : '#f20033'),
                 data: response.data[res].map(profit => profit.profit),
               },
@@ -136,6 +162,7 @@ export default {
   },
   mounted() {
     this.getStats();
+
     // this.$toast.add({severity:'success', summary: 'Success Message', detail:'Order submitted', life: 3000});
   }
 }
