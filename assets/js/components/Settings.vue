@@ -2,13 +2,13 @@
   <div class="grid p-fluid">
     <Toast position="bottom-right" />
 
-    <div class="col-12 lg:col-12">
+    <div class="col-12 col-lg-12">
       <div class="card mb-0">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">Trades history</span>
+            <span class="block text-500 font-medium mb-3">{{ $t('settings.trade-history.title') }}</span>
             <div class="text-900 font-medium text-xl">
-              Erase your trade history
+              {{ $t('settings.trade-history.sub-title') }}
             </div>
           </div>
           <div class="flex align-items-center justify-content-center" >
@@ -16,20 +16,22 @@
           </div>
         </div>
         <span class="text-orange-600 font-italic">
-          You have <span class="font-bold">{{ stats.total_orders }}</span> trades
+          {{ $t('settings.trade-history.counter', {count: stats.total_orders}) }}
         </span>
       </div>
 
       <div class="card mt-3">
         <div class="flex justify-content-between mb-3">
           <div>
-            <span class="block text-500 font-medium mb-3">Import</span>
+            <span class="block text-500 font-medium mb-3">
+              {{ $t('settings.import.title') }}
+            </span>
             <div class="text-900 font-medium text-xl">
-              Import/Re-upload your trading report
+              {{ $t('settings.import.sub-title') }}
             </div>
           </div>
           <div class="flex align-items-center justify-content-center" >
-            <Button class="p-button-success" label="Import" icon="fa-regular fa-upload" icon-pos="right" @click="$router.push('import')" />
+            <Button class="p-button-success" :label="$t('settings.import.import-button')" icon="fa-regular fa-upload" icon-pos="right" @click="$router.push('import')" />
           </div>
         </div>
       </div>

@@ -14,19 +14,23 @@
       <i class="fa-solid fa-ellipsis-vertical"></i>
     </button>
 
-    <!--    <Menu ref="menu" :model="headerMenu" :popup="true" />-->
-    <ul class="layout-topbar-menu hidden lg:flex ">
-      <li>
+    <ul class="layout-topbar-menu hidden d-lg-flex ">
+
+      <li class="mr-2">
+        <LocaleSwitcher />
+      </li>
+
+      <li class="mr-2">
         <Button type="button"
                 icon="fa-regular fa-upload"
                 @click="onUploadClick"
-                class="origin-top p-button p-button-icon-only p-button-rounded p-button-text" />
+                class="origin-top p-button p-button-icon-only p-button-outlined"/>
       </li>
       <li>
         <Button type="button"
                 icon="fa-regular fa-arrow-right-from-bracket"
                 @click="onLogoutClick"
-                class="origin-top p-button p-button-icon-only p-button-rounded p-button-text" />
+                class="origin-top p-button p-button-icon-only p-button-outlined"/>
       </li>
     </ul>
 
@@ -54,7 +58,10 @@
 </template>
 
 <script>
+import LocaleSwitcher from "./components/LocaleSwitcher";
+
 export default {
+  components: {LocaleSwitcher},
   data() {
     return {
       auth: false,
@@ -77,15 +84,22 @@ export default {
         },
         {
           label: 'Home',
-          icon: 'pi pi-home'
+          icon: 'pi pi-home',
+          to: {
+            name: 'dashboard',
+            params: {
+              locale: 'ru'
+            }
+          }
         },
       ]
     }
   },
-  mounted() {
-    // this.checkAuth();
-  },
   methods: {
+    toggle(event) {
+      this.$refs.menu.toggle(event);
+    },
+
     onMenuToggle(event) {
       this.$emit('menu-toggle', event);
     },
@@ -103,10 +117,10 @@ export default {
       let self = this;
 
       this.axios.get('/api/security/check')
-          .then(function(response) {
+          .then(function (response) {
             self.auth = true;
           })
-          .catch(function(error) {
+          .catch(function (error) {
             self.auth = false;
           })
     },

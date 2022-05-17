@@ -1,0 +1,42 @@
+{
+  "login": {
+    "title": "Please sign in!"
+  },
+  "form": {
+    "label": {
+      "password": "Password",
+      "signin": "Sign in"
+    }
+  },
+  "message": {
+    "invalid-login-request": "Invalid login request: check that the Content-Type header is \"application/json\"."
+  },
+  "Invalid credentials.": "Incorrect email or password",
+  "change-locale": "Change language",
+  "locale-ru": "Russian",
+  "locale-en": "English",
+  "menu": {
+    "home": "Home",
+    "main": "Main",
+    "performance": "Performance",
+    "monthly": "Monthly",
+    "daily": "Daily",
+    "hourly": "Hourly",
+    "allocation": "Allocation",
+    "by-market-type": "By market type",
+    "settings": "Settings"
+  },
+  "settings": {
+    "trade-history": {
+      "title": "Trades history",
+      "sub-title": "Erase your trades history",
+      "counter": "You have {count} trades",
+      "erase-button": "Erase"
+    },
+    "import": {
+      "title": "Import",
+      "sub-title": "Import/Re-upload your trading report",
+      "import-button": "Import"
+    }
+  }
+}

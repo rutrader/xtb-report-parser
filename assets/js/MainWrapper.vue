@@ -8,6 +8,11 @@ import EventBus from './AppEventBus';
 export default {
   name: "MainWrapper",
   mounted() {
+
+    this.localeSwitchListener = (event) => {
+      this.$locale.code = event.locale;
+    }
+
     this.themeChangeListener = (event) => {
       const elementId = 'theme-link';
       const linkElement = document.getElementById(elementId);
@@ -27,9 +32,12 @@ export default {
     };
 
     EventBus.on('theme-change', this.themeChangeListener);
+    EventBus.on('locale-change', this.localeSwitchListener);
+
   },
   beforeUnmount() {
     EventBus.off('theme-change', this.themeChangeListener);
+    EventBus.off('locale-change', this.themeChangeListener);
   }
 }
 </script>

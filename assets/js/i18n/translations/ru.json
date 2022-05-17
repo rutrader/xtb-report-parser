@@ -1,0 +1,53 @@
+{
+  "login": {
+    "title": "Пожалуйста, авторизуйтесь!"
+  },
+  "form": {
+    "label": {
+      "password": "Пароль",
+      "signin": "Авторизоваться"
+    }
+  },
+  "message": {
+    "invalid-login-request": "Invalid login request: check that the Content-Type header is \"application/json\"."
+  },
+  "Invalid credentials.": "Неправильный емейл или пароль",
+  "change-locale": "Сменить язык",
+  "locale-ru": "Русский",
+  "locale-en": "Английский",
+  "menu": {
+    "home": "Главная",
+    "main": "Основное",
+    "performance": "Эффективность",
+    "monthly": "По месяцам",
+    "daily": "По дням",
+    "hourly": "По часам",
+    "allocation": "Распределение",
+    "by-market-type": "По типам рынков",
+    "settings": "Настройки"
+  },
+  "settings": {
+    "trade-history": {
+      "title": "История сделок",
+      "sub-title": "Очистить историю сделок",
+      "counter": "У вас {count} сделок",
+      "erase-button": "Очистить"
+    },
+    "import": {
+      "title": "Импорт",
+      "sub-title": "Импортировать историю сделок",
+      "import-button": "Импортировать"
+    }
+  },
+  "trades": "Сделки",
+  "buy-orders": "Покупки",
+  "sell-orders": "Продажи",
+  "gross-profit-loss": "Прибыль/убыток (гросс)",
+  "net-profit": "Чистая прибыль",
+  "performance": {
+    "overall-trades": "Общая эффективность"
+  },
+  "profit-to-loss": "Прибыльные/Убыточные сделки (%)",
+  "profitable-trades": "Прибыльные сделки",
+  "loss-trades": "Прибыльные сделки"
+}

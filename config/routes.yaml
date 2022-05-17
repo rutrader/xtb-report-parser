@@ -13,7 +13,7 @@ api_routes:
   type: directory
 
 app_json_login:
-  path: /json/login
+  path: /login
   controller: App\Controller\Api\LoginController::index
 
 #app_auth_routes:

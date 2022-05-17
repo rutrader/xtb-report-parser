@@ -12,15 +12,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LoginController extends AbstractController
 {
-	
-	/**
-	 * @Route("/login", name="")
-	 */
+
+    /**
+     * @param \ApiPlatform\Core\Api\IriConverterInterface $iriConverter
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
 	public function index(IriConverterInterface $iriConverter): Response
 	{
 		if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
 			return $this->json([
-				'error' => 'Invalid login request: check that the Content-Type header is "application/json".'
+				'error' => 'message.invalid-login-request'
 			], 400);
 		}
 		

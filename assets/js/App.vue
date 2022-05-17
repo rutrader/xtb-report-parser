@@ -1,22 +1,22 @@
 <template>
-    <div :class="containerClass" @click="onWrapperClick" v-if="user">
-      <div class="layout-main-container">
+  <div :class="containerClass" @click="onWrapperClick" v-if="user">
+    <div class="layout-main-container">
 
-        <AppTopBar @menu-toggle="onMenuToggle" />
+      <AppTopBar @menu-toggle="onMenuToggle" @change-locale="onChangeLocale"/>
 
-        <div class="layout-sidebar" @click="onSidebarClick">
-          <AppMenu :model="menu" @menuitem-click="onMenuItemClick" />
-        </div>
-
-        <div class="layout-main">
-          <router-view />
-        </div>
-        <!--      <AppFooter />-->
+      <div class="layout-sidebar" @click="onSidebarClick">
+        <AppMenu :model="menu" @menuitem-click="onMenuItemClick"/>
       </div>
+
+      <div class="layout-main">
+        <router-view/>
+      </div>
+              <AppFooter />
     </div>
-    <div v-else>
-      <Login v-on:user-authenticated="onUserAuthenticated" />
-    </div>
+  </div>
+  <div v-else class="overflow-x-hidden">
+    <Login v-on:user-authenticated="onUserAuthenticated"/>
+  </div>
 </template>
 
 <script>
@@ -24,6 +24,7 @@
 import AppTopBar from "./AppTopBar";
 import AppMenu from "./AppMenu";
 import Login from './components/Login'
+import AppFooter from "./AppFooter";
 
 export default {
   name: "App",
@@ -31,6 +32,7 @@ export default {
     'AppTopBar': AppTopBar,
     'AppMenu': AppMenu,
     'Login': Login,
+    'AppFooter': AppFooter,
   },
   data() {
     return {
@@ -41,30 +43,52 @@ export default {
       mobileMenuActive: false,
       menu: [
         {
-          label: 'Home',
+          label: 'menu.home',
           items: [{
-            label: 'Dashboard', icon: 'fa-thin fa-home', to: '/'
+            label: 'menu.main', icon: 'fa-thin fa-home', to: {
+              name: 'dashboard'
+            }
           }]
         },
         {
-          label: 'Performance',
+          label: 'menu.performance',
           items: [
-            {label: 'Monthly', icon: 'fa-thin fa-chart-pie-simple', to: '/performance/monthly'},
-            {label: 'Daily', icon: 'fa-thin fa-calendar-day', to: '/performance/daily'},
-            {label: 'Hourly', icon: 'fa-thin fa-clock-five', to: '/performance/hourly'},
+            {
+              label: 'menu.monthly', icon: 'fa-thin fa-chart-pie-simple', to: {
+                name: 'performance-monthly',
+              }
+            },
+            {
+              label: 'menu.daily', icon: 'fa-thin fa-calendar-day', to: {
+                name: 'performance-daily'
+              }
+            },
+            {
+              label: 'menu.hourly', icon: 'fa-thin fa-clock-five', to: {
+                name: 'performance-hourly'
+              }
+            },
             // {label: 'By days', icon: 'fa-thin fa-chart-mixed', to: '/time-stats/win-loss'}
           ]
         },
         {
-          label: 'Allocation',
+          label: 'menu.allocation',
           items: [
-            {label: 'By market type', icon: 'fa-thin fa-boxes-stacked', to: '/allocation/markets'}
+            {
+              label: 'menu.by-market-type', icon: 'fa-thin fa-boxes-stacked', to: {
+                name: 'allocation-by-markets'
+              }
+            }
           ]
         },
         {
-          label: 'Settings',
+          label: 'menu.settings',
           items: [
-            {label: 'Settings', icon: 'fa-thin fa-cog', to: '/settings'}
+            {
+              label: 'menu.main', icon: 'fa-thin fa-cog', to: {
+                name: 'settings'
+              }
+            }
           ]
         }
         /*{
@@ -77,11 +101,15 @@ export default {
     }
   },
   mounted() {
-    if(window.user) {
+    if (window.user) {
       this.user = window.user;
     }
   },
   methods: {
+    onChangeLocale(locale) {
+      this.$i18n.locale = locale;
+    },
+
     onWrapperClick() {
       if (!this.menuClick) {
         this.overlayMenuActive = false;

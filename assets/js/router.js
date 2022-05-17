@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import App from './App.vue';
+import { setI18nLanguage, loadLocaleMessages } from './i18n'
+import {supportedLocalesInclude} from './i18n/supported-locales'
 
 const routes = [
 	{
@@ -14,42 +16,42 @@ const routes = [
 			},
 			
 			{
-				path: '',
+				path: '/:locale/',
 				name: 'dashboard',
 				component: () => import('./components/Dashboard')
 			},
 			{
-				path: '/performance/monthly',
+				path: '/:locale/performance/monthly',
 				name: 'performance-monthly',
 				component: () => import('./components/Performance/Monthly')
 			},
 			{
-				path: '/performance/daily',
+				path: '/:locale/performance/daily',
 				name: 'performance-daily',
 				component: () => import('./components/Performance/Daily')
 			},
 			{
-				path: '/performance/hourly',
+				path: '/:locale/performance/hourly',
 				name: 'performance-hourly',
 				component: () => import('./components/Performance/Hourly')
 			},
 			{
-				path: '/allocation/markets',
+				path: '/:locale/allocation/markets',
 				name: 'allocation-by-markets',
 				component: () => import('./components/Allocation/Markets')
 			},
 			{
-				path: '/import',
+				path: '/:locale/import',
 				name: 'import',
 				component: () => import('./components/Import')
 			},
 			{
-				path: '/settings',
+				path: '/:locale/settings',
 				name: 'settings',
 				component: () => import('./components/Settings')
 			},
 			{
-				path: '/login',
+				path: '/:locale/login',
 				name: 'login',
 				component: () => import('./components/Login')
 			}
@@ -57,11 +59,34 @@ const routes = [
 	}
 ]
 
+export function setUpRouter(i18n) {
+	const locale =
+		i18n.mode === 'legacy' ? i18n.global.locale : i18n.global.locale.value
 
-const router = createRouter({
-	history: createWebHashHistory(),
-	routes,
-});
+	const router = createRouter({
+		history: createWebHashHistory(),
+		routes,
+	});
 
-export default router;
+	// navigation guards
+	router.beforeEach(async to => {
+		const paramsLocale = to.params.locale
+
+		// use locale if paramsLocale is not in SUPPORT_LOCALES
+		if (!supportedLocalesInclude(paramsLocale)) {
+			return `/${locale}`
+		}
+
+		// load locale messages
+		if (!i18n.global.availableLocales.includes(paramsLocale)) {
+			await loadLocaleMessages(i18n, paramsLocale)
+			console.info('router');
+		}
+
+		// set i18n language
+		setI18nLanguage(i18n, paramsLocale)
+	})
+
+	return router
+}
 

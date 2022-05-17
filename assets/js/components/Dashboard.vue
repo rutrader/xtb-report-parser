@@ -8,7 +8,7 @@
           <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
-                <span class="block text-500 font-medium mb-3">Trades</span>
+                <span class="block text-500 font-medium mb-3">{{ $t('trades') }}</span>
                 <div class="text-900 font-medium text-xl">
                   <span v-if="hasStats">
                     {{ this.stats.total_orders }}
@@ -36,7 +36,7 @@
           <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
-                <span class="block text-500 font-medium mb-3">Buy orders</span>
+                <span class="block text-500 font-medium mb-3">{{ $t('buy-orders') }}</span>
                 <div class="text-900 font-medium text-xl">
                   <span v-if="hasStats">
                     {{ this.stats.buy_orders }}
@@ -64,7 +64,7 @@
           <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
-                <span class="block text-500 font-medium mb-3">Sell orders</span>
+                <span class="block text-500 font-medium mb-3">{{ $t('sell-orders') }}</span>
                 <div class="text-900 font-medium text-xl">
                   <span v-if="hasStats">
                     {{ this.stats.sell_orders }}
@@ -92,7 +92,7 @@
           <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
-                <span class="block text-500 font-medium mb-3">Gross P/L</span>
+                <span class="block text-500 font-medium mb-3">{{ $t('gross-profit-loss') }}</span>
                 <div class="text-900 font-medium text-xl">
                   <span v-if="hasStats">
                     {{ parseFloat(this.stats.pl).toFixed(2) }}
@@ -118,7 +118,7 @@
 
         <div class="col-12 col-lg-6">
           <div class="card" v-if="hasStats">
-            <h5>Overall trades performance</h5>
+            <h5>{{ $t('performance.overall-trades') }}</h5>
             <Chart type="line" :data="lineData" :options="lineOptions" />
           </div>
           <div v-else>
@@ -129,7 +129,7 @@
         <div class="col-12 col-lg-6">
 
           <div class="card flex flex-column align-items-center" v-if="hasStats">
-            <h5 class="align-self-start">Profit to Loss</h5>
+            <h5 class="align-self-start">{{ $t('profit-to-loss') }}</h5>
             <Chart ref="pieChart" type="pie" :data="getAccuracy()" :options="pieOptions" style="width: 50%" />
           </div>
           <div v-else>
@@ -210,7 +210,6 @@ export default {
 
     getAccuracy() {
       this.pieData.datasets[0].data = [this.stats.profit_orders / this.stats.total_orders * 100, this.stats.loss_orders / this.stats.total_orders * 100]
-
       return this.pieData;
     },
 
@@ -225,6 +224,8 @@ export default {
   mounted() {
     this.getOverallStats();
     this.getPerformanceOverall();
+    this.pieData.labels.push(this.$t('profitable-trades'), this.$t('loss-trades'));
+    this.lineData.datasets[0].label = this.$t('net-profit')
   },
 
   data() {
@@ -261,7 +262,7 @@ export default {
 
 
       pieData: {
-        labels: ['Прибыльные сделки', 'Убыточные сделки'],
+        labels: [],
         datasets: [
           {
             data: [],
@@ -278,10 +279,6 @@ export default {
           }
         ]
       },
-      items: [
-        {label: 'Add New', icon: 'pi pi-fw pi-plus'},
-        {label: 'Remove', icon: 'pi pi-fw pi-minus'}
-      ],
       pieOptions: null,
     }
   }
