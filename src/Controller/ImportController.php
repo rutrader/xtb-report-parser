@@ -54,12 +54,14 @@ class ImportController extends AbstractController
 		
 		$imported = 0;
 		
+		$fields = json_decode($request->request->get('fields'), true);
+
 		if (($handle = fopen($request->files->get('report')->getPathname(), 'rb')) !== false) {
 			
 			$this->tradesHistoryService->removeAllForUser($user);
 			
 			$row = 0;
-			
+
 			$importedDate = new DateTimeImmutable;
 			
 			while (($data = fgetcsv($handle, 1000, ';')) !== false) {
@@ -67,21 +69,22 @@ class ImportController extends AbstractController
 				if ($row === 1 || count($data) < 10) {
 					continue;
 				}
-				
+		
 				try {
 					$history = $this->tradesHistoryService->create([
-						'symbol' => $data[0],
-						'position' => $data[1],
-						'orderType' => $this->orderTypeService->getOrderTypeByName($data[2]),
-						'lots' => (float)$data[3],
-						'openedAt' => new DateTimeImmutable($data[4]),
-						'openPrice' => (float)$data[5],
-						'closedAt' => new DateTimeImmutable($data[6]),
-						'closePrice' => (float)$data[7],
-						'profit' => (float)$data[8],
-						'netProfit' => (float)$data[9],
-						'comment' => $data[10],
-						'market' => $this->marketTypeService->getMarketBySymbol($data[0]),
+						'symbol' => $data[$fields['symbol']],
+						// 'symbol' => $data[$fields['symbol']]
+						'position' => $data[$fields['position']],
+						'orderType' => $this->orderTypeService->getOrderTypeByName($data[$fields['orderType']]),
+						'lots' => (float)$data[$fields['lots']],
+						'openedAt' => new DateTimeImmutable($data[$fields['openedAt']]),
+						'openPrice' => (float)$data[$fields['openPrice']],
+						'closedAt' => new DateTimeImmutable($data[$fields['closedAt']]),
+						'closePrice' => (float)$data[$fields['closePrice']],
+						'profit' => (float)$data[$fields['profit']],
+						'netProfit' => (float)$data[$fields['netProfit']],
+						// 'comment' => $data[10],
+						'market' => $this->marketTypeService->getMarketBySymbol($data[$fields['symbol']]),
 						'user' => $user,
 						'importedAt' => $importedDate,
 					], false);
