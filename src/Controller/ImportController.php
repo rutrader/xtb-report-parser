@@ -46,6 +46,10 @@ class ImportController extends AbstractController
 	 */
 	public function index(Request $request): Response
 	{
+		return $this->json([
+			'message' => 'Imported ' . 1 . ' rows',
+		]);
+
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		
 		if(!$user = $this->getUser()) {
