@@ -12,7 +12,7 @@
             </div>
           </div>
           <div class="flex align-items-center justify-content-center" >
-            <Button :disabled="stats.total_orders <= 0" class="p-button-danger" label="Submit" icon="fa-regular fa-trash-can-xmark" iconPos="right" @click="clearRecords" />
+            <Button :disabled="stats.total_orders <= 0" class="p-button-danger" :label="$t('settings.trade-history.erase-button')" icon="fa-regular fa-trash-can-xmark" iconPos="right" @click="clearRecords" />
           </div>
         </div>
         <span class="text-orange-600 font-italic">
@@ -75,7 +75,7 @@ export default {
       })
     },
   },
-  mounted() {
+  created() {
     this.getOverallStats()
   }
 }

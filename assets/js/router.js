@@ -41,9 +41,19 @@ const routes = [
 				component: () => import('./components/Allocation/Markets')
 			},
 			{
+				path: '/:locale/allocation/assets',
+				name: 'allocation-by-assets',
+				component: () => import('./components/Allocation/Assets')
+			},
+			{
 				path: '/:locale/import',
 				name: 'import',
-				component: () => import('./components/Import')
+				component: () => import('./components/Import/Import')
+			},
+			{
+				path: '/:locale/import/xtb',
+				name: 'import-xtb',
+				component: () => import('./components/Import/Xtb')
 			},
 			{
 				path: '/:locale/settings',

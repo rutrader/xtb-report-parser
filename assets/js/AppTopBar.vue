@@ -111,7 +111,7 @@ export default {
     },
     onUploadClick(event) {
       // this.$refs.menu.toggle(event);
-      this.$router.push('import')
+      this.$router.push({name: 'import'})
     },
     checkAuth() {
       let self = this;
@@ -125,7 +125,7 @@ export default {
           })
     },
     onLogoutClick() {
-      window.location = '/auth/logout'
+      window.location = '/logout'
     }
   },
   computed: {

@@ -32,7 +32,7 @@ security:
                 password_path: password
 
             logout:
-                path: app_auth_logout
+                path: app_json_logout
 
             remember_me:
                 secret: '%kernel.secret%'

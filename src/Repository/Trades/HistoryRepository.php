@@ -253,32 +253,38 @@ class HistoryRepository extends ServiceEntityRepository
 			->getQuery()->execute();
 	}
 	
-	// /**
-	//  * @return History[] Returns an array of History objects
-	//  */
-	/*
-	public function findByExampleField($value)
+	/**
+	 * @return int|mixed|string
+	 */
+	public function statsByAssets(UserInterface $user)
 	{
-		return $this->createQueryBuilder('h')
-			->andWhere('h.exampleField = :val')
-			->setParameter('val', $value)
-			->orderBy('h.id', 'ASC')
-			->setMaxResults(10)
-			->getQuery()
-			->getResult()
-		;
+		$qb = $this->createQueryBuilder('h');
+		
+		$qb
+			->select('MONTH(DATE_TRUNC(\'month\', h.openedAt)) as month')
+			->addSelect('h.symbol')
+			->addSelect('SUM(h.netProfit) as profit')
+			// ->addSelect('market_type.name as market')
+			->addSelect('COUNT(h.symbol) as counter')
+			->addSelect('SUM(CASE WHEN h.netProfit >= 0 THEN 1 ELSE 0 END) as winners')
+			->addSelect('SUM(CASE WHEN h.netProfit < 0 THEN 1 ELSE 0 END) as losers');
+		
+		$qb->join('h.marketType', 'market_type');
+		
+		$qb->where('h.trader = :trader');
+		
+		$qb->setParameter('trader', $user);
+		
+		$qb
+			// ->groupBy('market')
+			->addGroupBy('h.symbol')
+			->addGroupBy('month');
+		
+		$qb
+			->orderBy('month')
+			->addOrderBy('profit', 'DESC')
+			;
+		
+		return $qb->getQuery()->getResult();
 	}
-	*/
-	
-	/*
-	public function findOneBySomeField($value): ?History
-	{
-		return $this->createQueryBuilder('h')
-			->andWhere('h.exampleField = :val')
-			->setParameter('val', $value)
-			->getQuery()
-			->getOneOrNullResult()
-		;
-	}
-	*/
 }

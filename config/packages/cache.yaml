@@ -1,7 +1,10 @@
 framework:
     cache:
         # Unique name of your app: used to compute stable namespaces for cache keys.
-        #prefix_seed: your_vendor_name/app_name
+        prefix_seed: rutrader/xtb_parser
+
+        app: cache.adapter.redis
+        default_redis_provider: redis://127.0.0.1:6379
 
         # The "app" cache stores to the filesystem by default.
         # The data in this cache should persist between deploys.

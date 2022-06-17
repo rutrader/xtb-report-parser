@@ -78,6 +78,11 @@ export default {
               label: 'menu.by-market-type', icon: 'fa-thin fa-boxes-stacked', to: {
                 name: 'allocation-by-markets'
               }
+            },
+            {
+              label: 'menu.by-assets', icon: 'fa-thin fa-boxes-stacked', to: {
+                name: 'allocation-by-assets'
+              }
             }
           ]
         },

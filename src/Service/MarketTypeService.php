@@ -22,6 +22,7 @@ class MarketTypeService
 		'cardano',
 		'ripple',
 		'polkadot',
+		'bitcoin',
 	];
 
 	/**
