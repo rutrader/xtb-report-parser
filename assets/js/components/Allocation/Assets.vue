@@ -68,10 +68,6 @@ export default {
 
 			this.axios.get('/api/allocations/assets').then((response) => {
 				self.stats = response.data;
-
-				// Object.keys(response.data).map((res, key) => {
-
-				// })
 			})
 		},
 		getStatsForDataTable(month) {
@@ -98,21 +94,6 @@ export default {
 }
 </script>
 <style lang="scss">
-// .pi {
-// 	display: inline-block !important;
-
-// 	&::before {
-// 		display: none;
-// 		text-rendering: auto;
-// 		-webkit-font-smoothing: antialiased;
-// 	}
-// }
-
-// .pi-sort-alt::before {
-// 	content: "\f883";
-// 	font: var(--fa-font-light);
-// }
-
 
 .p-datatable {
 	.p-sortable-column {

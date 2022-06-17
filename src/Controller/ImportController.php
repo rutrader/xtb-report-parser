@@ -10,70 +10,76 @@ use App\Service\TradesHistoryService;
 use App\Service\MarketTypeService;
 use App\Service\OrderTypeService;
 use \DateTimeImmutable;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
 
 /**
  * @author Ruslan Ishemgulov <ruslan.ishemgulov@gmail.com>
  */
 class ImportController extends AbstractController
 {
-	
+
 	/** @var \Doctrine\ORM\EntityManagerInterface */
 	private $em;
-	
+
 	/** @var \App\Service\MarketTypeService */
 	private $marketTypeService;
-	
+
 	/** @var \App\Service\OrderTypeService */
 	private $orderTypeService;
-	
+
 	/** @var \App\Service\TradesHistoryService */
 	private $tradesHistoryService;
-	
+
+	/** @var \Symfony\Component\Cache\Adapter\AdapterInterface */
+	private $cacheAdapter;
+
 	/**
 	 * @param \Doctrine\ORM\EntityManagerInterface $em
 	 */
-	public function __construct(EntityManagerInterface $em, TradesHistoryService $tradesHistoryService, MarketTypeService $marketTypeService, OrderTypeService $orderTypeService)
+	public function __construct(EntityManagerInterface $em, 
+		TradesHistoryService $tradesHistoryService, 
+		MarketTypeService $marketTypeService, 
+		OrderTypeService $orderTypeService,
+		AdapterInterface $adapterInterface
+		)
 	{
 		$this->em = $em;
 		$this->tradesHistoryService = $tradesHistoryService;
 		$this->marketTypeService = $marketTypeService;
 		$this->orderTypeService = $orderTypeService;
+		$this->cacheAdapter = $adapterInterface;
 	}
-	
+
 	/**
 	 * @param \Symfony\Component\HttpFoundation\Request $request
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
 	public function index(Request $request): Response
 	{
-		return $this->json([
-			'message' => 'Imported ' . 1 . ' rows',
-		]);
-
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-		
-		if(!$user = $this->getUser()) {
+
+		if (!$user = $this->getUser()) {
 			return $this->json([], Response::HTTP_FORBIDDEN);
 		}
-		
+
 		$imported = 0;
-		
+
 		$fields = json_decode($request->request->get('fields'), true);
 
 		if (($handle = fopen($request->files->get('report')->getPathname(), 'rb')) !== false) {
-			
+
 			$this->tradesHistoryService->removeAllForUser($user);
-			
+
 			$row = 0;
 
 			$importedDate = new DateTimeImmutable;
-			
+
 			while (($data = fgetcsv($handle, 1000, ';')) !== false) {
 				$row++;
 				if ($row === 1 || count($data) < 10) {
 					continue;
 				}
-		
+
 				try {
 					$history = $this->tradesHistoryService->create([
 						'symbol' => $data[$fields['symbol']],
@@ -92,9 +98,9 @@ class ImportController extends AbstractController
 						'user' => $user,
 						'importedAt' => $importedDate,
 					], false);
-					
+
 					$imported++;
-					
+
 					/*if (($row % 50) === 0) {
 						$this->em->flush();
 						$imported = 0;
@@ -104,15 +110,15 @@ class ImportController extends AbstractController
 				}
 			}
 		}
-		
+
 		if ($imported > 0) {
+			$this->cacheAdapter->clear();
 			$this->em->flush();
 		}
-		
-		
+
+
 		return $this->json([
 			'message' => 'Imported ' . $row . ' rows',
 		]);
 	}
-	
 }
