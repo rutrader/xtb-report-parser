@@ -36,5 +36,15 @@ class AllocationController extends AbstractController
 		
 		return $this->json($this->tradesHistoryService->statsByMarkets($user));
 	}
-	
+
+	/**
+	 * @return \Symfony\Component\HttpFoundation\JsonResponse
+	 */
+	public function assets() {
+		if(!$user = $this->getUser()) {
+			return $this->json([], Response::HTTP_FORBIDDEN);
+		}
+
+		return $this->json($this->tradesHistoryService->statsByAssets($user));
+	}
 }

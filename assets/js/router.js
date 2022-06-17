@@ -41,6 +41,11 @@ const routes = [
 				component: () => import('./components/Allocation/Markets')
 			},
 			{
+				path: '/:locale/allocation/assets',
+				name: 'allocation-by-assets',
+				component: () => import('./components/Allocation/Assets')
+			},
+			{
 				path: '/:locale/import',
 				name: 'import',
 				component: () => import('./components/Import/Import')

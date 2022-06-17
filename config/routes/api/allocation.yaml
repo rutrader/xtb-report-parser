@@ -1,3 +1,7 @@
 api_allocation_markets:
   path: /allocations/markets
   controller: App\Controller\Api\AllocationController::markets
+
+api_allocation_assets:
+  path: /allocations/assets
+  controller: App\Controller\Api\AllocationController::assets

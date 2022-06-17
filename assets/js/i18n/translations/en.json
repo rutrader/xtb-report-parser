@@ -24,7 +24,8 @@
     "hourly": "Hourly",
     "allocation": "Allocation",
     "by-market-type": "By market type",
-    "settings": "Settings"
+    "settings": "Settings",
+    "by-assets": "By assets"
   },
   "settings": {
     "trade-history": {

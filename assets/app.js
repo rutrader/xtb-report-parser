@@ -26,6 +26,8 @@ import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
 import Skeleton from 'primevue/skeleton';
 import Dropdown from "primevue/dropdown";
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 import axios from 'axios';
 import VueAxios from 'vue-axios';
@@ -81,6 +83,9 @@ if (document.getElementById('app')) {
 	// app.component('Column', Column)
 	app.component('Skeleton', Skeleton)
 	app.component('Dropdown', Dropdown)
+
+	app.component('DataTable', DataTable)
+	app.component('Column', Column)
 
 // app.component('font-awesome-icon', FontAwesomeIcon)
 	app.mount('#app')

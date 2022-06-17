@@ -184,6 +184,27 @@ class TradesHistoryService
 		return $stats;
 	}
 	
+		/**
+	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
+	 * @return array
+	 */
+	public function statsByAssets(UserInterface $user): array
+	{
+		$stats = [];
+
+		foreach ($this->historyRepository->statsByAssets($user) as $byAsset) {
+			$stats[$byAsset['month']][$byAsset['symbol']] = [
+				'counter' => $byAsset['counter'],
+				// 'symbol' => $byAsset['symbol'],
+				'winners' => $byAsset['winners'],
+				'losers' => $byAsset['losers'],
+				'profit' => $byAsset['profit']
+			];
+		}
+		
+		return $stats;
+	}
+
 	/**
 	 * @param \Symfony\Component\Security\Core\User\UserInterface $user
 	 * @return int|mixed|string
