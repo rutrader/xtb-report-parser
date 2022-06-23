@@ -6,7 +6,7 @@ import 'primeflex/primeflex.css';
 import 'prismjs/themes/prism-coy.css';
 import '../assets/styles/layout.scss';
 
-import {createApp, reactive} from 'vue'
+import { createApp, reactive } from 'vue'
 import { setupI18n } from './js/i18n'
 import { setUpRouter } from './js/router'
 
@@ -50,27 +50,27 @@ if (document.getElementById('app')) {
 		window.scrollTo(0, 0);
 		next();
 	});
-	
-	
-	const app = createApp(AppWrapper)
-	
-	app.config.globalProperties.$appState = reactive({theme: 'lara-light-indigo', darkTheme: false});
-	app.config.globalProperties.$locale = reactive({code: 'en'});
 
-// app.config.compilerOptions.delimiters = ['${', '}']
-	
-	app.use(PrimeVue, {ripple: true, inputStyle: 'outlined'});
+
+	const app = createApp(AppWrapper)
+
+	app.config.globalProperties.$appState = reactive({ theme: 'lara-light-indigo', darkTheme: false });
+	app.config.globalProperties.$locale = reactive({ code: 'en' });
+
+	// app.config.compilerOptions.delimiters = ['${', '}']
+
+	app.use(PrimeVue, { ripple: true, inputStyle: 'outlined' });
 	app.use(router)
 	app.use(ToastService)
 	app.use(VueAxios, axios)
 	app.use(i18n)
-	
+
 	app.directive('tooltip', Tooltip);
 	app.directive('ripple', Ripple);
-// app.directive('code', CodeHighlight);
+	// app.directive('code', CodeHighlight);
 	app.directive('badge', BadgeDirective);
 	app.directive('styleclass', StyleClass);
-	
+
 	app.component('Badge', Badge);
 	app.component('Chart', Chart);
 	app.component('FileUpload', FileUpload);
@@ -78,7 +78,7 @@ if (document.getElementById('app')) {
 	app.component('Menu', Menu)
 	app.component('Button', Button)
 	app.component('Message', Message)
-	
+
 	// app.component('DataTable', DataTable);
 	// app.component('Column', Column)
 	app.component('Skeleton', Skeleton)
@@ -87,6 +87,6 @@ if (document.getElementById('app')) {
 	app.component('DataTable', DataTable)
 	app.component('Column', Column)
 
-// app.component('font-awesome-icon', FontAwesomeIcon)
+	// app.component('font-awesome-icon', FontAwesomeIcon)
 	app.mount('#app')
 }

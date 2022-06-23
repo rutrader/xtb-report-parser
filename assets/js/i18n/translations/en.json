@@ -38,6 +38,9 @@
       "title": "Import",
       "sub-title": "Import/Re-upload your trading report",
       "import-button": "Import"
+    },
+    "currency": {
+      "title": "Base currency"
     }
   },
   "trades": "Trades",
@@ -49,10 +52,12 @@
     "overall-trades": "Overall performance",
     "by-month": "Performance by months",
     "by-day": "Performance by days",
-    "by-hour": "Performance by hours"
+    "by-hour": "Performance by hours",
+    "in-currency": "Performance, {currency}"
   },
   "profit-to-loss": "Profit/Loss (%)",
   "profitable-trades": "Profits",
   "loss-trades": "Loses",
-  "winners-losers": "Winners/losers"
+  "winners-losers": "Winners/losers",
+  "trades-counts": "How many trades?"
 }

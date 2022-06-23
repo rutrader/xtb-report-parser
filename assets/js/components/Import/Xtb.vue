@@ -32,13 +32,13 @@
 						</tr>
 					</thead> -->
 					<tbody>
-						<tr v-for="(field, key) in fields" v-bind:key="key">
+						<tr v-for="(field, fieldKey) in fields" v-bind:key="fieldKey">
 							<td class="fw-bold">{{ field }}</td>
 							<td>
-								<select class="form-select" v-on:change="onMapFields($event.target.value, key)"
-									v-if="headers">
+								<select class="form-select" :class="[mapped[fieldKey] < 0 ? 'border-danger' : '']" v-on:change="onMapFields($event.target, $event.target.value, fieldKey)"
+									v-if="headers" v-model="mapped[fieldKey]">
 									<option>Select field</option>
-									<option v-for="(header, key) in headers.split(';')" v-bind:key="key" :value="key"
+									<option v-for="(header, key) in headers" v-bind:key="key" :value="key"
 										:disabled="mapped[key] > -1">{{ header }}</option>
 								</select>
 							</td>
@@ -108,10 +108,18 @@ export default {
 			reader.readAsText(self.file);
 
 			reader.addEventListener("load", () => {
-				self.headers = reader.result.split('\n').shift().replace(/(\r\n|\n|\r)/gm, "");
+				self.headers = reader.result.split('\n').shift().replace(/(\r\n|\n|\r)/gm, "").split(';');
+
+				Object.keys(self.headers).forEach(function (i, k) {
+
+					let field = Object.keys(self.fields).find(fieldKey => self.fields[fieldKey] === self.headers[k]);;
+
+					if (field && self.mapped[field]) {
+						self.mapped[field] = k;
+					}
+				})
 			}, false);
 		},
-
 
 		submitReport() {
 			let
@@ -149,7 +157,9 @@ export default {
 			event.formData.set('fields', JSON.stringify(this.mapped));
 		},
 
-		onMapFields(csvKey, field) {
+		onMapFields(target, csvKey, field) {
+			console.log(target);
+
 			this.mapped[field] = parseInt(csvKey);
 		},
 

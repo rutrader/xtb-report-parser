@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Service\SettingsService;
 use App\Service\TradesHistoryService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,13 +17,18 @@ class StatsController extends AbstractController
 	
 	/** @var \App\Service\TradesHistoryService */
 	private TradesHistoryService $tradesHistoryService;
+
+	/** @var \App\Service\SettingsService */
+	private $settingsService;
+
 	
 	/**
 	 * @param \App\Service\TradesHistoryService $tradesHistoryService
 	 */
-	public function __construct(TradesHistoryService $tradesHistoryService)
+	public function __construct(TradesHistoryService $tradesHistoryService, SettingsService $settingsService)
 	{
 		$this->tradesHistoryService = $tradesHistoryService;
+		$this->settingsService = $settingsService;
 	}
 
     /**
@@ -31,7 +37,16 @@ class StatsController extends AbstractController
      */
 	public function __invoke(): JsonResponse
     {
-        return $this->json($this->tradesHistoryService->getOverallStats($this->getUser()));
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+		$user = $this->getUser();
+
+		$stats = $this->tradesHistoryService->getOverallStats($user);
+		$account = [
+			'currency' => $this->settingsService->getUserCurrency($user)
+		];
+
+        return $this->json(array_merge($stats, $account));
     }
 
 }
