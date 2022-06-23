@@ -38,12 +38,15 @@
       "title": "Импорт",
       "sub-title": "Импортировать историю сделок",
       "import-button": "Импортировать"
+    },
+    "currency": {
+      "title": "Базовая валюта"
     }
   },
   "trades": "Сделки",
   "buy-orders": "Покупки",
   "sell-orders": "Продажи",
-  "gross-profit-loss": "Прибыль/убыток (гросс)",
+  "gross-profit-loss": "Прибыль/убыток (gross)",
   "net-profit": "Чистая прибыль",
   "performance": {
     "overall-trades": "Общая эффективность",

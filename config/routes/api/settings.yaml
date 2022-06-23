@@ -1,3 +1,12 @@
 api_settings_clear_history:
   path: /settings/clear-history
   controller: App\Controller\Api\Settings\ClearHistoryController::clearHistory
+
+api_settings_set_currency:
+  path: /settings/set-currency
+  methods: POST
+  controller: App\Controller\Api\Settings\SettingsController::setCurrency
+
+api_settings_get_currency:
+  path: /settings/get-currency
+  controller: App\Controller\Api\Settings\SettingsController::getCurrency

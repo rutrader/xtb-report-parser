@@ -19,7 +19,7 @@
                 </div>
               </div>
               <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
-                   style="width:2.5rem;height:2.5rem">
+                style="width:2.5rem;height:2.5rem">
                 <i class="fa-light fa-sigma text-blue-500 text-xl"></i>
               </div>
             </div>
@@ -47,7 +47,7 @@
                 </div>
               </div>
               <div class="flex align-items-center justify-content-center bg-orange-100 border-round"
-                   style="width:2.5rem;height:2.5rem">
+                style="width:2.5rem;height:2.5rem">
                 <i class="fa-light fa-arrow-trend-up text-green-500 text-xl"></i>
               </div>
             </div>
@@ -75,7 +75,7 @@
                 </div>
               </div>
               <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
-                   style="width:2.5rem;height:2.5rem">
+                style="width:2.5rem;height:2.5rem">
                 <i class="fa-light fa-arrow-trend-down text-orange-500 text-xl"></i>
               </div>
             </div>
@@ -92,7 +92,9 @@
           <div class="card mb-0" v-if="hasStats">
             <div class="flex justify-content-between mb-3">
               <div>
-                <span class="block text-500 font-medium mb-3">{{ $t('gross-profit-loss') }}</span>
+                <span class="block text-500 font-medium mb-3">{{ $t('gross-profit-loss') }}, {{
+                    this.stats.currency.toUpperCase()
+                }}</span>
                 <div class="text-900 font-medium text-xl">
                   <span v-if="hasStats">
                     {{ parseFloat(this.stats.pl).toFixed(2) }}
@@ -103,7 +105,7 @@
                 </div>
               </div>
               <div class="flex align-items-center justify-content-center bg-teal-100 border-round"
-                   style="width:2.5rem;height:2.5rem">
+                style="width:2.5rem;height:2.5rem">
                 <i class="fa-light fa-sack-dollar text-blue-500"></i>
               </div>
             </div>
@@ -149,13 +151,8 @@
 
           <h5>Advanced</h5>
 
-          <FileUpload name="report"
-                      url="/import"
-                      @upload="onUpload"
-                      @error="onFileUploadError"
-                      :multiple="false"
-                      accept=".csv"
-                      :maxFileSize="1000000" />
+          <FileUpload name="report" url="/import" @upload="onUpload" @error="onFileUploadError" :multiple="false"
+            accept=".csv" :maxFileSize="1000000" />
         </div>
       </div>
 
@@ -183,6 +180,7 @@ export default {
       let self = this;
 
       self.axios.get('/api/performance/overall').then((response) => {
+        self.lineData.datasets[0].label += (',' + self.stats.currency.toUpperCase)
         self.lineData.datasets[0].data = response.data.map(res => res.net_profit);
         self.lineData.labels = response.data.map(res => res.date);
       })
@@ -236,7 +234,7 @@ export default {
       profits: 0,
       loses: 0,
       total: 0,
-      months: Utils.months({count: 12}),
+      months: Utils.months({ count: 12 }),
       lineData: {
         labels: [],
         datasets: [
@@ -286,5 +284,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
